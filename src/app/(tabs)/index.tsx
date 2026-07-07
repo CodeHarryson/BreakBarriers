@@ -1,29 +1,42 @@
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Palette } from '@/components/exercises/exercise-footer';
+import { GoalRing } from '@/components/goal-ring';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { course, isLessonUnlocked } from '@/lib/content';
-import { effectiveStreak } from '@/lib/streak';
+import { dateKey, effectiveStreak } from '@/lib/streak';
 import { levelForXp, useProfile } from '@/state/profile';
 
 export default function LearnScreen() {
   const router = useRouter();
-  const { xp, cowries, streak, completedLessons } = useProfile();
+  const { xp, cowries, streak, completedLessons, onboarded, dailyGoalXp, xpToday, xpTodayDate } =
+    useProfile();
+
+  if (!onboarded) return <Redirect href="/onboarding" />;
+
+  const earnedToday = xpTodayDate === dateKey() ? xpToday : 0;
 
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.statsRow}>
-          <ThemedText type="smallBold">🔥 {effectiveStreak(streak)}</ThemedText>
-          <ThemedText type="smallBold">🐚 {cowries}</ThemedText>
-          <ThemedText type="smallBold">⭐ Lv {levelForXp(xp)}</ThemedText>
-          <ThemedText type="smallBold" themeColor="textSecondary">
-            {xp} XP
-          </ThemedText>
+          <GoalRing earned={earnedToday} goal={dailyGoalXp} size={56} />
+          <View style={styles.statsCol}>
+            <View style={styles.statsInner}>
+              <ThemedText type="smallBold">🔥 {effectiveStreak(streak)}</ThemedText>
+              <ThemedText type="smallBold">🐚 {cowries}</ThemedText>
+              <ThemedText type="smallBold">⭐ Lv {levelForXp(xp)}</ThemedText>
+            </View>
+            <ThemedText type="small" themeColor="textSecondary">
+              {earnedToday >= dailyGoalXp
+                ? 'Ibi-àfẹ́dé ti parí — goal met! 🎉'
+                : `${earnedToday}/${dailyGoalXp} XP today`}
+            </ThemedText>
+          </View>
         </View>
 
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -81,8 +94,17 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: Spacing.three,
     paddingVertical: Spacing.three,
+  },
+  statsCol: {
+    flex: 1,
+    gap: Spacing.one,
+  },
+  statsInner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   scroll: {
     gap: Spacing.four,

@@ -50,16 +50,16 @@ Shipped ahead of schedule, all committed:
 
 **Goal:** the core loop is something Harry uses daily on his own phone.
 
-| Pts | Item | Acceptance criteria |
-|---|---|---|
-| 🔑 2 | Install Xcode + iOS simulator runtime | `npm start` → `i` boots the app |
-| 🔑 1 | Decide: hearts/energy or unlimited practice (recommend: unlimited) | Decision recorded in IMPLEMENTATION_PLAN §6 |
-| 3 | Onboarding flow (first launch): welcome → why-Yorùbá motivation pick → avatar base pick → straight into `tones-1` | New install lands in first lesson in <60s; skippable |
-| 3 | Restore-on-reinstall: if local profile is empty and server has one for this device id, offer restore | Delete + reinstall recovers XP/streak/deck |
-| 3 | Empty/error states pass: practice empty state, lesson-not-found, sync-off mode | No dead ends; airplane mode never blocks the loop |
-| 3 | Daily goal ring on Learn tab (XP target/day, default 20) + "goal met" moment | Ring fills; resets at local midnight |
-| 2 | Streak-freeze purchase UI on profile (cowries → 🧊) | Buy decrements cowries; freeze auto-consumes on a missed day |
-| 3 | Haptics + micro-animations on answer check and lesson complete | Correct/incorrect feel distinct; no jank on device |
+| Status | Pts | Item | Acceptance criteria |
+|---|---|---|---|
+| [x] | 🔑 2 | Install Xcode + iOS simulator runtime | `npm start` → `i` boots the app ✓ (Xcode 26.6, iPhone 17 Pro sim) |
+| [x] | 🔑 1 | Decide: hearts/energy or unlimited practice | **Unlimited, no hearts** — recorded in IMPLEMENTATION_PLAN §6 |
+| [x] | 3 | Onboarding flow (first launch): welcome → why-Yorùbá motivation pick → avatar base pick → straight into `tones-1` | New install lands in first lesson in <60s; skippable |
+| [x] | 3 | Restore-on-reinstall: if local profile is empty and server has one for this device id, offer restore | Restore offer on onboarding welcome (5s timeout, silent offline) |
+| [x] | 3 | Empty/error states pass: practice empty state, lesson-not-found, sync-off mode | No dead ends; airplane mode never blocks the loop |
+| [x] | 3 | Daily goal ring on Learn tab (XP target/day, default 20) + "goal met" moment | Ring fills; resets at local midnight |
+| [x] | 2 | Streak-freeze purchase UI on profile (cowries → 🧊, max 2) | Buy decrements cowries; freeze auto-consumes on a missed day |
+| [x] | 3 | Haptics + micro-animations on answer check and lesson complete | Success/error haptics; feedback slide-in; summary zoom celebration |
 
 **Slack risk:** Xcode download is slow — start it Monday morning.
 

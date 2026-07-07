@@ -1,7 +1,16 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { Platform, Pressable, StyleSheet } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
+
+function feedbackHaptic(correct: boolean) {
+  if (Platform.OS === 'web') return;
+  void Haptics.notificationAsync(
+    correct ? Haptics.NotificationFeedbackType.Success : Haptics.NotificationFeedbackType.Error,
+  );
+}
 
 export const Palette = {
   green: '#58CC02',
@@ -28,14 +37,19 @@ export function ExerciseFooter({ checked, correct, canCheck, correctAnswer, note
       <Pressable
         accessibilityRole="button"
         disabled={!canCheck}
-        onPress={onCheck}
+        onPress={() => {
+          feedbackHaptic(correct);
+          onCheck();
+        }}
         style={[styles.button, { backgroundColor: canCheck ? Palette.green : '#AFAFAF' }]}>
         <ThemedText style={styles.buttonLabel}>Check</ThemedText>
       </Pressable>
     );
   }
   return (
-    <View style={[styles.feedback, { backgroundColor: correct ? '#D7FFB8' : '#FFDFE0' }]}>
+    <Animated.View
+      entering={FadeInDown.duration(200)}
+      style={[styles.feedback, { backgroundColor: correct ? '#D7FFB8' : '#FFDFE0' }]}>
       <ThemedText type="smallBold" style={{ color: correct ? Palette.greenDark : Palette.redDark }}>
         {correct ? 'Ó dára! (Correct!)' : `Correct answer: ${correctAnswer}`}
       </ThemedText>
@@ -50,7 +64,7 @@ export function ExerciseFooter({ checked, correct, canCheck, correctAnswer, note
         style={[styles.button, { backgroundColor: correct ? Palette.green : Palette.red }]}>
         <ThemedText style={styles.buttonLabel}>Continue</ThemedText>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 

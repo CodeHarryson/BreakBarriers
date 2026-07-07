@@ -1,8 +1,7 @@
 /**
  * Learner profile: XP, cowries, streak, SRS deck, lesson progress, avatar.
- * Persisted locally (offline-first). Supabase sync arrives with auth in a
- * later Phase 1 step — keep all mutations inside store actions so the sync
- * layer can hook them.
+ * Persisted locally (offline-first). All mutations live in store actions so
+ * the sync layer (src/lib/sync.ts) can piggyback on subscribe().
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
@@ -22,9 +21,27 @@ import { defaultAvatar, WARDROBE, type AvatarConfig } from '@/data/wardrobe';
 
 export const COWRIES_PER_LESSON = 10;
 export const XP_PER_LEVEL = 150;
+export const XP_PER_REVIEW = 2;
+export const DEFAULT_DAILY_GOAL_XP = 20;
+export const FREEZE_COST_COWRIES = 25;
+export const MAX_FREEZES = 2;
 
 export function levelForXp(xp: number): number {
   return Math.floor(xp / XP_PER_LEVEL) + 1;
+}
+
+/** Snapshot shape returned by GET /learners/:deviceId (server/). */
+export interface RemoteProfile {
+  xp: number;
+  cowries: number;
+  currentStreak: number;
+  longestStreak: number;
+  streakFreezes: number;
+  lastActiveDate: string | null;
+  avatar: AvatarConfig | null;
+  ownedItems: string[] | null;
+  completedLessons: Record<string, true> | null;
+  srsDeck: Record<string, StoredCard> | null;
 }
 
 interface ProfileState {
@@ -36,13 +53,32 @@ interface ProfileState {
   reviewLog: ReviewLogEntry[];
   avatar: AvatarConfig;
   ownedItems: string[];
+  onboarded: boolean;
+  motivation: string | null;
+  dailyGoalXp: number;
+  xpToday: number;
+  xpTodayDate: string;
 
   completeLesson: (lessonId: string) => void;
   reviewVocab: (vocabId: string, rating: Rating.Again | Rating.Hard | Rating.Good | Rating.Easy) => void;
   buyItem: (itemId: string) => boolean;
+  buyStreakFreeze: () => boolean;
   equipItem: (itemId: string | null, slot: keyof Omit<AvatarConfig, 'base'>) => void;
   setAvatarBase: (base: string) => void;
+  completeOnboarding: (motivation: string | null, base: string) => void;
+  restoreFromRemote: (remote: RemoteProfile) => void;
   dueVocabIds: () => string[];
+  todayXp: () => number;
+}
+
+/** Fold `amount` XP into total + today counters (today resets at local midnight). */
+function xpGain(s: Pick<ProfileState, 'xp' | 'xpToday' | 'xpTodayDate'>, amount: number) {
+  const today = dateKey();
+  return {
+    xp: s.xp + amount,
+    xpToday: (s.xpTodayDate === today ? s.xpToday : 0) + amount,
+    xpTodayDate: today,
+  };
 }
 
 export const useProfile = create<ProfileState>()(
@@ -56,6 +92,11 @@ export const useProfile = create<ProfileState>()(
       reviewLog: [],
       avatar: defaultAvatar,
       ownedItems: ['buba-basic'],
+      onboarded: false,
+      motivation: null,
+      dailyGoalXp: DEFAULT_DAILY_GOAL_XP,
+      xpToday: 0,
+      xpTodayDate: dateKey(),
 
       completeLesson: (lessonId) => {
         const entry = getLesson(lessonId);
@@ -68,7 +109,7 @@ export const useProfile = create<ProfileState>()(
             if (!deck[vocabId]) deck[vocabId] = newCard();
           }
           return {
-            xp: s.xp + lesson.xp,
+            ...xpGain(s, lesson.xp),
             cowries: s.cowries + (firstCompletion ? COWRIES_PER_LESSON : 2),
             streak: applyActivity(s.streak, dateKey()),
             completedLessons: { ...s.completedLessons, [lessonId]: true },
@@ -82,6 +123,7 @@ export const useProfile = create<ProfileState>()(
           const card = s.srsDeck[vocabId];
           if (!card) return s;
           return {
+            ...xpGain(s, XP_PER_REVIEW),
             srsDeck: { ...s.srsDeck, [vocabId]: reviewCard(card, rating) },
             reviewLog: [
               ...s.reviewLog,
@@ -102,13 +144,48 @@ export const useProfile = create<ProfileState>()(
         return true;
       },
 
+      buyStreakFreeze: () => {
+        const s = get();
+        if (s.cowries < FREEZE_COST_COWRIES || s.streak.freezes >= MAX_FREEZES) return false;
+        set({
+          cowries: s.cowries - FREEZE_COST_COWRIES,
+          streak: { ...s.streak, freezes: s.streak.freezes + 1 },
+        });
+        return true;
+      },
+
       equipItem: (itemId, slot) => {
         set((s) => ({ avatar: { ...s.avatar, [slot]: itemId ?? undefined } }));
       },
 
       setAvatarBase: (base) => set((s) => ({ avatar: { ...s.avatar, base } })),
 
+      completeOnboarding: (motivation, base) =>
+        set((s) => ({ onboarded: true, motivation, avatar: { ...s.avatar, base } })),
+
+      restoreFromRemote: (remote) =>
+        set(() => ({
+          xp: remote.xp,
+          cowries: remote.cowries,
+          streak: {
+            current: remote.currentStreak,
+            longest: remote.longestStreak,
+            freezes: remote.streakFreezes,
+            lastActiveDate: remote.lastActiveDate,
+          },
+          avatar: remote.avatar ?? defaultAvatar,
+          ownedItems: remote.ownedItems ?? ['buba-basic'],
+          completedLessons: remote.completedLessons ?? {},
+          srsDeck: remote.srsDeck ?? {},
+          onboarded: true,
+        })),
+
       dueVocabIds: () => dueCards(get().srsDeck),
+
+      todayXp: () => {
+        const s = get();
+        return s.xpTodayDate === dateKey() ? s.xpToday : 0;
+      },
     }),
     {
       name: 'breakbarriers-profile-v1',

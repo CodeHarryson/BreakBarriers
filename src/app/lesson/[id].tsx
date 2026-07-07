@@ -1,6 +1,8 @@
+import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import Animated, { FadeInUp, ZoomIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MatchPairs } from '@/components/exercises/match-pairs';
@@ -23,6 +25,9 @@ export default function LessonScreen() {
   const [index, setIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
+  // Captured at completion time: the store flips completedLessons before the
+  // summary renders, so reading `alreadyDone` there would show the repeat reward.
+  const [cowriesEarned, setCowriesEarned] = useState(COWRIES_PER_LESSON);
 
   const entry = id ? getLesson(id) : undefined;
   if (!entry) {
@@ -42,7 +47,11 @@ export default function LessonScreen() {
     if (index + 1 < total) {
       setIndex(index + 1);
     } else {
+      setCowriesEarned(alreadyDone ? 2 : COWRIES_PER_LESSON);
       completeLesson(lesson.id);
+      if (Platform.OS !== 'web') {
+        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
       setFinished(true);
     }
   };
@@ -52,13 +61,16 @@ export default function LessonScreen() {
       <SafeAreaView style={styles.safeArea}>
         {finished ? (
           <View style={styles.summary}>
-            <ThemedText style={styles.bigEmoji}>🎉</ThemedText>
-            <ThemedText type="subtitle" style={styles.centered}>
-              Kú iṣẹ́! Lesson complete
-            </ThemedText>
+            <Animated.View entering={ZoomIn.springify().duration(500)}>
+              <ThemedText style={styles.bigEmoji}>🎉</ThemedText>
+            </Animated.View>
+            <Animated.View entering={FadeInUp.delay(150).duration(300)}>
+              <ThemedText type="subtitle" style={styles.centered}>
+                Kú iṣẹ́! Lesson complete
+              </ThemedText>
+            </Animated.View>
             <ThemedText themeColor="textSecondary" style={styles.centered}>
-              {correctCount}/{total} correct · +{lesson.xp} XP · +
-              {alreadyDone ? 2 : COWRIES_PER_LESSON} 🐚
+              {correctCount}/{total} correct · +{lesson.xp} XP · +{cowriesEarned} 🐚
             </ThemedText>
             <Pressable
               accessibilityRole="button"

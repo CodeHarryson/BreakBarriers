@@ -6,10 +6,30 @@
 import { useEffect } from 'react';
 
 import { getDeviceId } from '@/lib/device-id';
-import { useProfile } from '@/state/profile';
+import { useProfile, type RemoteProfile } from '@/state/profile';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const DEBOUNCE_MS = 4000;
+const FETCH_TIMEOUT_MS = 5000;
+
+/**
+ * Look up a previous profile for this device (restore-on-reinstall).
+ * Returns null when sync is off, offline, or nothing meaningful is stored.
+ */
+export async function fetchRemoteProfile(): Promise<RemoteProfile | null> {
+  if (!API_URL) return null;
+  try {
+    const deviceId = await getDeviceId();
+    const res = await fetch(`${API_URL}/learners/${deviceId}`, {
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+    if (!res.ok) return null;
+    const remote = (await res.json()) as RemoteProfile;
+    return remote.xp > 0 ? remote : null;
+  } catch {
+    return null; // offline / server down — onboarding proceeds fresh
+  }
+}
 
 let timer: ReturnType<typeof setTimeout> | null = null;
 let inFlight = false;

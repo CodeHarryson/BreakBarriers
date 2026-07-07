@@ -148,7 +148,7 @@ xp_events(user_id, amount, source, created_at)                 -- powers leagues
 
 ## 6. Open Product Decisions (revisit at Phase 1 kickoff)
 
-1. Hearts/energy vs. unlimited free practice (hearts drive monetization but add friction for a niche language — consider launching without them).
+1. ~~Hearts/energy vs. unlimited free practice~~ **Decided (Sprint 1, Jul 2026): unlimited practice, no hearts** — friction hurts more than it monetizes for a niche language; revisit if a premium tier needs a lever.
 2. Avatar art style (2D illustrated vs. Duolingo-flat vs. 3D) — cost vs. charm tradeoff; drives wardrobe production cost per item.
 3. Community features scope (chat is powerful for immersion enforcement but adds moderation burden).
 4. Whether the Immersion Contract should hard-lock (can't reduce level until done) or soft-pause — test both in beta.

@@ -7,12 +7,28 @@ import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { AVATAR_BASES, WARDROBE, type WardrobeSlot } from '@/data/wardrobe';
 import { effectiveStreak } from '@/lib/streak';
-import { levelForXp, useProfile, XP_PER_LEVEL } from '@/state/profile';
+import {
+  FREEZE_COST_COWRIES,
+  levelForXp,
+  MAX_FREEZES,
+  useProfile,
+  XP_PER_LEVEL,
+} from '@/state/profile';
 
 export default function ProfileScreen() {
-  const { xp, cowries, streak, avatar, ownedItems, buyItem, equipItem, setAvatarBase } =
-    useProfile();
+  const {
+    xp,
+    cowries,
+    streak,
+    avatar,
+    ownedItems,
+    buyItem,
+    buyStreakFreeze,
+    equipItem,
+    setAvatarBase,
+  } = useProfile();
   const level = levelForXp(xp);
+  const canBuyFreeze = cowries >= FREEZE_COST_COWRIES && streak.freezes < MAX_FREEZES;
 
   const equippedEmoji = (slot: WardrobeSlot) => {
     const id = avatar[slot];
@@ -44,6 +60,30 @@ export default function ProfileScreen() {
             <Stat label="Cowries" value={`🐚 ${cowries}`} />
             <Stat label="Freezes" value={`🧊 ${streak.freezes}`} />
           </View>
+
+          <ThemedView type="backgroundElement" style={styles.itemRow}>
+            <ThemedText style={styles.itemEmoji}>🧊</ThemedText>
+            <View style={styles.itemText}>
+              <ThemedText type="smallBold">Streak freeze</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                {streak.freezes >= MAX_FREEZES
+                  ? `Max ${MAX_FREEZES} equipped — you're covered`
+                  : `Protects a missed day · 🐚 ${FREEZE_COST_COWRIES}`}
+              </ThemedText>
+            </View>
+            <Pressable
+              accessibilityRole="button"
+              disabled={!canBuyFreeze}
+              onPress={buyStreakFreeze}
+              style={[
+                styles.itemButton,
+                { backgroundColor: canBuyFreeze ? Palette.amber : '#AFAFAF' },
+              ]}>
+              <ThemedText type="smallBold" style={styles.itemButtonLabel}>
+                {streak.freezes >= MAX_FREEZES ? 'Full' : 'Buy'}
+              </ThemedText>
+            </Pressable>
+          </ThemedView>
 
           <ThemedText type="smallBold" themeColor="textSecondary" style={styles.sectionTitle}>
             FACE
