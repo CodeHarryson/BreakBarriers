@@ -1,0 +1,209 @@
+# BreakBarriers — Sprint Plan
+
+*Created July 6, 2026. Companion to [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md); this is the execution schedule.*
+
+---
+
+## 1. How we work
+
+| | |
+|---|---|
+| **Team** | Harry (product owner / decisions / accounts / outreach) + Claude Code (engineering) |
+| **Cadence** | 1-week sprints, Monday → Friday. Solo-founder pace: short sprints keep scope honest. |
+| **Ceremonies** | **Mon:** pick the sprint goal + backlog from this doc. **Fri:** demo build to yourself on device, mark items done/slipped, pull the diff forward. |
+| **Estimation** | Points (1 / 2 / 3 / 5 / 8). Budget ≈ **20 pts/sprint**. Anything estimated 8 gets split before it enters a sprint. |
+| **Definition of Done** | Typecheck + `validate:content` + lint clean · runs on the iOS simulator · state survives app restart · README/docs updated if behavior changed · committed |
+| **Board** | This file is the board. Statuses: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked. |
+
+**Labels:** 🔑 = only Harry can do it (account, decision, outreach, purchase). Items without 🔑 are engineering.
+
+## 2. Milestones
+
+| Milestone | Target | Definition |
+|---|---|---|
+| **M1 — Device build** | end of Sprint 2 (Jul 17) | Full core loop runs on your physical iPhone; daily-use ready |
+| **M2 — TestFlight** | end of Sprint 4 (Jul 31) | Installable by external testers; analytics + crash reporting live |
+| **M3 — Immersion beta** | end of Sprint 8 (Aug 28) | Immersion Contract shipped; 25–50 heritage-learner beta testers active |
+| **M4 — App Store launch** | end of Sprint 10 (Sep 11) | Approved, public, with launch content (Units 1–6) |
+
+Velocity check: if two sprints in a row close under 70%, cut scope from M3 (drop task missions to 1, ship stories post-launch) rather than slipping M4.
+
+---
+
+## 3. Sprint 0 — Foundations ✅ (done, week of Jul 6)
+
+Shipped ahead of schedule, all committed:
+
+- [x] Product research + implementation plan (`docs/`)
+- [x] Expo SDK 57 scaffold, TypeScript, expo-router, iOS-first
+- [x] Content pipeline: course JSON schema, validator, seed content (3 units / 7 lessons / 32 vocab, diacritized)
+- [x] Lesson engine: select-translation, word-bank, match-pairs + lesson player with progress/feedback
+- [x] FSRS practice queue (ts-fsrs), review logging
+- [x] Iná streak engine (freezes), XP/levels, cowrie economy
+- [x] Avatar + wardrobe (emoji placeholders), buy/equip
+- [x] Prisma Postgres backend (`server/`): schema pushed, sync + restore endpoints, round-trip tested
+- [x] App-side debounced push sync, anonymous device id
+
+---
+
+## 4. Sprint 1 — "Runs on my iPhone" (Mon Jul 6 → Fri Jul 10) · 20 pts
+
+**Goal:** the core loop is something Harry uses daily on his own phone.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 🔑 2 | Install Xcode + iOS simulator runtime | `npm start` → `i` boots the app |
+| 🔑 1 | Decide: hearts/energy or unlimited practice (recommend: unlimited) | Decision recorded in IMPLEMENTATION_PLAN §6 |
+| 3 | Onboarding flow (first launch): welcome → why-Yorùbá motivation pick → avatar base pick → straight into `tones-1` | New install lands in first lesson in <60s; skippable |
+| 3 | Restore-on-reinstall: if local profile is empty and server has one for this device id, offer restore | Delete + reinstall recovers XP/streak/deck |
+| 3 | Empty/error states pass: practice empty state, lesson-not-found, sync-off mode | No dead ends; airplane mode never blocks the loop |
+| 3 | Daily goal ring on Learn tab (XP target/day, default 20) + "goal met" moment | Ring fills; resets at local midnight |
+| 2 | Streak-freeze purchase UI on profile (cowries → 🧊) | Buy decrements cowries; freeze auto-consumes on a missed day |
+| 3 | Haptics + micro-animations on answer check and lesson complete | Correct/incorrect feel distinct; no jank on device |
+
+**Slack risk:** Xcode download is slow — start it Monday morning.
+
+## 5. Sprint 2 — Retention plumbing → **M1** (Jul 13 → Jul 17) · 20 pts
+
+**Goal:** the app pulls you back tomorrow.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 🔑 2 | Create Expo account, `eas init`, iOS credentials | `eas build --profile development` succeeds |
+| 🔑 3 | Enroll in Apple Developer Program ($99 — approval can take days, **do this Monday**) | Enrollment confirmed |
+| 3 | Local streak-reminder notifications (evening, only if today's goal unmet), streak-in-danger copy in Yorùbá+English | Fires at 19:00 local; deep-links to Learn |
+| 3 | Practice-due notification (morning, only if ≥5 cards due) | Fires ≤1×/day; respects permission denial gracefully |
+| 3 | Development build on physical iPhone (dev client) | Daily-drivable on Harry's phone |
+| 2 | Deploy `server/` (Fly.io or Railway free tier) + point `EXPO_PUBLIC_API_URL` at it | Sync works away from the dev Mac |
+| 2 | Weekly cowrie chest (login bonus escalating across the week) | Chest state survives restart; resets weekly |
+| 2 | Perfect-lesson bonus (+5 🐚 for 100%) with celebration | Shows only on 100% first-try answers |
+
+## 6. Sprint 3 — Content depth (Jul 20 → Jul 24) · 21 pts
+
+**Goal:** enough course to survive a motivated learner's first two weeks.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 5 | Unit 3 "Oúnjẹ àti Ọjà" (food & market) + Unit 4 "Ìbéèrè" (questions): ~10 lessons, ~60 new vocab | Validator clean; i+1 ordering (no word used before taught) |
+| 3 | New exercise type: free-text translation with **lenient diacritic grading** (accept unmarked input, show tone tip) | `e kaaro` accepted for `Ẹ káàárọ̀` with a "tones" nudge |
+| 3 | New exercise type: tone-pair listening placeholder → **visual tone drill** (pitch-contour graphic, no audio yet) | Renders L/M/H contours for minimal pairs |
+| 3 | In-app Yorùbá character bar for text inputs (ẹ ọ ṣ + tone marks) | Usable in free-text exercises |
+| 2 | Lesson checkpoint quizzes at unit end (mixed review, 2× XP) | Gate to next unit; failing suggests practice |
+| 3 | Content tooling: `validate:content` checks i+1 ordering + duplicate-vocab reuse across lessons | CI-grade exit codes |
+| 2 | GitHub Actions CI: typecheck + validate + lint on push | Red X on broken main |
+
+## 7. Sprint 4 — TestFlight → **M2** (Jul 27 → Jul 31) · 19 pts
+
+**Goal:** strangers can install it; we can see what they do and where it crashes.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 🔑 2 | App Store Connect app record, TestFlight internal group | Build visible in TestFlight |
+| 🔑 2 | Decide avatar art direction (2D flat recommended) + commission first 8 wardrobe items OR bless emoji for beta | Decision recorded; assets ordered if commissioned |
+| 3 | App icon + splash (àdìrẹ-pattern placeholder is fine) & display name | Passes App Store asset validation |
+| 3 | PostHog: session, lesson_start/complete, review_done, streak_day, contract events schema | Events visible in dashboard |
+| 3 | Sentry crash reporting + source maps | Test crash symbolicated |
+| 3 | `eas build` production profile + TestFlight submission pipeline (`eas submit`) | One-command ship |
+| 3 | Performance/a11y pass: cold start <2s on device, Dynamic Type doesn't break layouts, VoiceOver labels on exercise controls | Verified on device |
+
+## 8. Sprint 5 — Immersion Contract I (Aug 3 → Aug 7) · 20 pts
+
+**Goal:** the differentiator exists — commitment mechanics first, UI flip next sprint.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 5 | Contract domain model + setup flow: pick 7/14/30 days, daily minimum XP, optional cowrie wager | Stored locally + synced; one active contract max |
+| 3 | Contract home-screen card: day N of M, today's minimum, at-risk state | Updates at midnight; survives restart |
+| 3 | Completion / failure flows: payout (cowries + exclusive wardrobe item), wager loss, honest "paused" state | All three reachable and tested via debug menu |
+| 3 | Device Immersion Checklist v1: guided Yorùbá keyboard install (Gboard/system), each step pays cowries | Steps persist; deep-links to Settings where possible |
+| 3 | Immersion i18n groundwork: extract ALL UI strings to i18next catalog (`en` locale) | Zero hardcoded user-facing strings |
+| 3 | Debug/QA menu (dev builds): time travel for streak/contract testing, reset profile | Streak & contract testable without waiting real days |
+
+## 9. Sprint 6 — Immersion Contract II: live in Yorùbá (Aug 10 → Aug 14) · 20 pts
+
+**Goal:** during a contract, the app itself is the immersion artifact.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 5 | Full `yo` UI locale (fully diacritized — engineering translation, flagged for later review) | Every screen renders in Yorùbá at immersion level 2 |
+| 5 | Tap-and-hold gloss overlay on any UI string (English tooltip) | Works on all screens; glossed words can be added to SRS deck |
+| 3 | Progressive immersion levels 0–3 wired to contract + learner level | Level transitions announced; beginner never starts above 1 |
+| 2 | Yorùbá notifications during active contract | Copy from i18n catalog |
+| 3 | Yorùbá-only input enforcement in free-text exercises during contract (heuristic: charset + wordlist) | English input bounced with in-Yorùbá nudge + hint button |
+| 2 | Contract analytics: start/complete/fail/pause funnels in PostHog | Funnel visible |
+
+## 10. Sprint 7 — Task-based learning (Aug 17 → Aug 21) · 20 pts
+
+**Goal:** the second differentiator — Iṣẹ́ missions and stories.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 5 | Task-mission engine: branching multi-step scenario composed of existing exercise types + choice nodes | Data-driven from content JSON; graded on task completion |
+| 5 | Missions ×2: "Ọjà" (haggle at the market), "Ìdílé" (greet the family) | Playable end-to-end; validator covers mission schema |
+| 5 | Stories (Ìtàn) v1: graded reader screen, tap-word gloss → SRS, 3 stories at i+1 for Units 1–3 | Unknown-word rate ≤10% by construction |
+| 3 | Learn-path integration: missions/stories unlock as special nodes | Distinct visual treatment |
+| 2 | XP/cowrie balancing pass across lesson/practice/mission/story | Documented economy table in this file |
+
+## 11. Sprint 8 — Closed beta → **M3** (Aug 24 → Aug 28) · 19 pts
+
+**Goal:** 25–50 real heritage learners using it; we fix what they hit.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 🔑 5 | Recruit 25–50 beta testers: diaspora orgs, Nigerian student associations, Yoruba-learning TikTok/IG creators, family WhatsApp | ≥25 TestFlight installs |
+| 🔑 2 | Set up a feedback channel (TestFlight feedback + a WhatsApp/Discord group) | Testers know where to talk |
+| 3 | Sign in with Apple (replaces device-id as primary identity; device id becomes fallback) | Progress survives phone migration |
+| 3 | In-app feedback affordance ("report a content error" on any exercise → logs vocab/lesson id) | Reports land somewhere queryable |
+| 5 | Beta-feedback fix budget (reserved) | Top crashes + top 5 UX complaints addressed |
+| 1 | Beta metrics dashboard: D1/D7 retention, contract completion, lesson funnel | Reviewed at Friday ceremony |
+
+## 12. Sprint 9 — Launch hardening (Aug 31 → Sep 4) · 20 pts
+
+**Goal:** everything the App Store and a public user demands.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 🔑 3 | Privacy policy + terms (template + review), support email/page | URLs live (required by App Review) |
+| 🔑 3 | App Store listing: screenshots, description, keywords ("learn Yoruba" ASO), category | Listing complete in App Store Connect |
+| 5 | Units 5–6 content ("Ìrìnàjò" travel/directions, "Ojoojúmọ́" daily verbs) | Launch promise: 6 units |
+| 3 | Second beta build with feedback round 2 fixes | Crash-free rate >99% |
+| 3 | Account deletion + data export endpoints (App Review requirement with SiwA) | Delete wipes Learner + logs |
+| 3 | Server hardening: rate limiting, request size caps, deviceId abuse guard, DB backup check | Basic abuse doesn't fall over; 🔑 rotate the Prisma key that was shared in plaintext |
+
+## 13. Sprint 10 — Launch → **M4** (Sep 7 → Sep 11) · ~14 pts + buffer
+
+**Goal:** approved and public. Deliberately light — review round-trips eat time.
+
+| Pts | Item | Acceptance criteria |
+|---|---|---|
+| 🔑 2 | Submit for App Review (expect 1 rejection round; resubmit fast) | Approved |
+| 3 | Review-rejection fix budget (reserved) | — |
+| 🔑 3 | Launch push: personal network, diaspora communities, r/Yoruba, creator DMs from Sprint 8 | Day-1 installs measured |
+| 2 | Post-launch monitoring: Sentry alerts, PostHog launch dashboard, server health | On-call = check twice daily first week |
+| 2 | App Store review prompt (after first contract completion or 7-day streak) | Prompts at the emotional high point |
+| 2 | Retro + re-plan: Phase 3 sprint plan (leagues, friends, audio program kickoff) | Next plan drafted |
+
+---
+
+## 14. Deferred / Icebox (explicitly out of MVP)
+
+- **Native-speaker content review + audio recording program** — *first item post-launch*; unblocks listening & speaking exercises
+- Android + web builds · leagues/leaderboards · friend streaks · premium subscription/monetization · ASR speaking grading · home-screen widget · commissioned avatar art integration (if not done Sprint 4) · FSRS parameter optimization from review logs
+
+## 15. Standing risks
+
+| Risk | Watch for | Mitigation |
+|---|---|---|
+| Apple Developer enrollment delay | Not approved by Sprint 4 | Enroll Sprint 2 Monday; M2 slips before scope does |
+| Solo-founder burnout / sprint overrun | 2 consecutive sprints <70% done | Cut M3 scope (1 mission, stories post-launch), never cut Sprint 1–2 retention items |
+| Unreviewed Yorùbá content embarrasses us in beta | Beta testers with native-speaker family flag errors | In-app content-error reporting (Sprint 8) + fix fast; be upfront in beta notes |
+| App Review rejection (account deletion, privacy) | — | Requirements built in Sprint 9 before submission |
+| Immersion mode churns beginners | Contract failure rate >60% in beta | Progressive levels + easy pause already designed; tune with Sprint 6 analytics |
+
+## 16. Metrics reviewed every Friday
+
+- D1 / D7 retention (PostHog cohorts) — targets: 40% / 20% by M3
+- Lesson completion funnel (start → finish) — >85%
+- Practice adherence (due cards cleared/day) — >50%
+- Contract completion rate (from M3) — >40%
+- Crash-free sessions — >99%
