@@ -1,0 +1,402 @@
+{
+  "id": "yo-en-v1",
+  "version": 1,
+  "sourceLang": "en",
+  "targetLang": "yo",
+  "_note": "SEED CONTENT — every Yorùbá string must be reviewed by a native speaker before release. Audio fields are filled once native-speaker recordings exist.",
+  "vocab": [
+    { "id": "greet-morning", "yo": "Ẹ káàárọ̀", "en": "Good morning", "tags": ["greeting"] },
+    { "id": "greet-afternoon", "yo": "Ẹ káàsán", "en": "Good afternoon", "tags": ["greeting"] },
+    { "id": "greet-evening", "yo": "Ẹ káalẹ́", "en": "Good evening", "tags": ["greeting"] },
+    { "id": "bawo-ni", "yo": "Báwo ni?", "en": "How are you?", "tags": ["greeting"] },
+    { "id": "daadaa-ni", "yo": "Dáadáa ni", "en": "I am fine", "tags": ["greeting"] },
+    { "id": "e-se", "yo": "Ẹ ṣé", "en": "Thank you (formal)", "tags": ["greeting"] },
+    { "id": "o-se", "yo": "O ṣé", "en": "Thank you (informal)", "tags": ["greeting"] },
+    { "id": "beeni", "yo": "Bẹ́ẹ̀ni", "en": "Yes", "tags": ["basics"] },
+    { "id": "rara", "yo": "Rárá", "en": "No", "tags": ["basics"] },
+    { "id": "odabo", "yo": "Ó dàbọ̀", "en": "Goodbye", "tags": ["greeting"] },
+    { "id": "oruko", "yo": "orúkọ", "en": "name", "tags": ["basics"] },
+    { "id": "mi", "yo": "mi", "en": "my", "tags": ["basics"] },
+    { "id": "ni", "yo": "ni", "en": "is/be", "tags": ["basics"] },
+    { "id": "kini", "yo": "kí ni", "en": "what is", "tags": ["basics"] },
+    { "id": "re", "yo": "rẹ", "en": "your", "tags": ["basics"] },
+    { "id": "iya", "yo": "ìyá", "en": "mother", "tonePattern": "LH", "tags": ["family"] },
+    { "id": "baba", "yo": "bàbá", "en": "father", "tonePattern": "LH", "tags": ["family"] },
+    { "id": "omo", "yo": "ọmọ", "en": "child", "tonePattern": "MM", "tags": ["family"] },
+    { "id": "ile", "yo": "ilé", "en": "house", "tonePattern": "MH", "tags": ["things"] },
+    { "id": "omi", "yo": "omi", "en": "water", "tonePattern": "MM", "tags": ["things"] },
+    { "id": "ounje", "yo": "oúnjẹ", "en": "food", "tags": ["things"] },
+    { "id": "owo", "yo": "owó", "en": "money", "tonePattern": "MH", "tags": ["things"] },
+    { "id": "oja", "yo": "ọjà", "en": "market", "tonePattern": "ML", "tags": ["things"] },
+    { "id": "okan", "yo": "ọ̀kan", "en": "one", "tonePattern": "LM", "tags": ["numbers"] },
+    { "id": "meji", "yo": "méjì", "en": "two", "tonePattern": "HL", "tags": ["numbers"] },
+    { "id": "meta", "yo": "mẹ́ta", "en": "three", "tonePattern": "HM", "tags": ["numbers"] },
+    { "id": "merin", "yo": "mẹ́rin", "en": "four", "tonePattern": "HM", "tags": ["numbers"] },
+    { "id": "marun", "yo": "márùn-ún", "en": "five", "tags": ["numbers"] },
+    { "id": "oko-husband", "yo": "ọkọ", "en": "husband", "tonePattern": "MM", "tags": ["tones"] },
+    { "id": "oko-vehicle", "yo": "ọkọ̀", "en": "vehicle", "tonePattern": "ML", "tags": ["tones"] },
+    { "id": "igba-calabash", "yo": "igbá", "en": "calabash", "tonePattern": "MH", "tags": ["tones"] },
+    { "id": "igba-time", "yo": "ìgbà", "en": "time / season", "tonePattern": "LL", "tags": ["tones"] }
+  ],
+  "units": [
+    {
+      "id": "unit-0-tones",
+      "titleYo": "Àwọn Ohùn",
+      "titleEn": "The Tones",
+      "lessons": [
+        {
+          "id": "tones-1",
+          "titleYo": "Ohùn mẹ́ta",
+          "titleEn": "Three tones",
+          "xp": 15,
+          "vocabIds": ["oko-husband", "oko-vehicle", "igba-calabash", "igba-time"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "ọkọ",
+              "choices": ["husband", "vehicle", "spear", "hoe"],
+              "answer": "husband",
+              "vocabIds": ["oko-husband"],
+              "note": "Mid–mid tone: ọkọ = husband. Tone changes the meaning!"
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "ọkọ̀",
+              "choices": ["vehicle", "husband", "money", "market"],
+              "answer": "vehicle",
+              "vocabIds": ["oko-vehicle"],
+              "note": "Mid–low tone: ọkọ̀ = vehicle/canoe. Compare ọkọ (husband)."
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "igbá",
+              "choices": ["calabash", "time / season", "two hundred", "garden"],
+              "answer": "calabash",
+              "vocabIds": ["igba-calabash"],
+              "note": "Mid–high: igbá = calabash."
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "ìgbà",
+              "choices": ["time / season", "calabash", "rope", "basket"],
+              "answer": "time / season",
+              "vocabIds": ["igba-time"],
+              "note": "Low–low: ìgbà = time. Same letters, different melody."
+            },
+            {
+              "type": "match_pairs",
+              "pairs": [
+                { "yo": "ọkọ", "en": "husband" },
+                { "yo": "ọkọ̀", "en": "vehicle" },
+                { "yo": "igbá", "en": "calabash" },
+                { "yo": "ìgbà", "en": "time / season" }
+              ],
+              "vocabIds": ["oko-husband", "oko-vehicle", "igba-calabash", "igba-time"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-1-greetings",
+      "titleYo": "Ìkíni",
+      "titleEn": "Greetings",
+      "lessons": [
+        {
+          "id": "greetings-1",
+          "titleYo": "Ẹ káàárọ̀!",
+          "titleEn": "Good morning!",
+          "xp": 15,
+          "vocabIds": ["greet-morning", "greet-afternoon", "greet-evening"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Ẹ káàárọ̀",
+              "choices": ["Good morning", "Good evening", "Good afternoon", "Goodbye"],
+              "answer": "Good morning",
+              "vocabIds": ["greet-morning"],
+              "note": "The Ẹ shows respect — use it for elders and groups."
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Ẹ káàsán",
+              "choices": ["Good afternoon", "Good morning", "Good evening", "Thank you (formal)"],
+              "answer": "Good afternoon",
+              "vocabIds": ["greet-afternoon"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Ẹ káalẹ́",
+              "choices": ["Good evening", "Good afternoon", "How are you?", "Yes"],
+              "answer": "Good evening",
+              "vocabIds": ["greet-evening"]
+            },
+            {
+              "type": "word_bank",
+              "direction": "en->yo",
+              "prompt": "Good morning",
+              "tokens": ["Ẹ", "káàárọ̀", "káalẹ́", "káàsán"],
+              "answer": ["Ẹ", "káàárọ̀"],
+              "vocabIds": ["greet-morning"]
+            },
+            {
+              "type": "match_pairs",
+              "pairs": [
+                { "yo": "Ẹ káàárọ̀", "en": "Good morning" },
+                { "yo": "Ẹ káàsán", "en": "Good afternoon" },
+                { "yo": "Ẹ káalẹ́", "en": "Good evening" }
+              ],
+              "vocabIds": ["greet-morning", "greet-afternoon", "greet-evening"]
+            }
+          ]
+        },
+        {
+          "id": "greetings-2",
+          "titleYo": "Báwo ni?",
+          "titleEn": "How are you?",
+          "xp": 15,
+          "vocabIds": ["bawo-ni", "daadaa-ni", "e-se", "o-se", "odabo"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Báwo ni?",
+              "choices": ["How are you?", "What is your name?", "Good morning", "Goodbye"],
+              "answer": "How are you?",
+              "vocabIds": ["bawo-ni"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Dáadáa ni",
+              "choices": ["I am fine", "Thank you (formal)", "Yes", "Good evening"],
+              "answer": "I am fine",
+              "vocabIds": ["daadaa-ni"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "en->yo",
+              "prompt": "Thank you (formal)",
+              "choices": ["Ẹ ṣé", "O ṣé", "Ó dàbọ̀", "Rárá"],
+              "answer": "Ẹ ṣé",
+              "vocabIds": ["e-se"],
+              "note": "Ẹ ṣé to elders/groups; O ṣé to friends."
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Ó dàbọ̀",
+              "choices": ["Goodbye", "Hello", "Welcome", "Please"],
+              "answer": "Goodbye",
+              "vocabIds": ["odabo"]
+            },
+            {
+              "type": "match_pairs",
+              "pairs": [
+                { "yo": "Báwo ni?", "en": "How are you?" },
+                { "yo": "Dáadáa ni", "en": "I am fine" },
+                { "yo": "Ẹ ṣé", "en": "Thank you (formal)" },
+                { "yo": "Ó dàbọ̀", "en": "Goodbye" }
+              ],
+              "vocabIds": ["bawo-ni", "daadaa-ni", "e-se", "odabo"]
+            }
+          ]
+        },
+        {
+          "id": "names-1",
+          "titleYo": "Orúkọ mi",
+          "titleEn": "My name",
+          "xp": 15,
+          "vocabIds": ["oruko", "mi", "ni", "kini", "re", "beeni", "rara"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "orúkọ",
+              "choices": ["name", "house", "child", "water"],
+              "answer": "name",
+              "vocabIds": ["oruko"]
+            },
+            {
+              "type": "word_bank",
+              "direction": "en->yo",
+              "prompt": "My name is Adé",
+              "tokens": ["Orúkọ", "mi", "ni", "Adé", "rẹ", "kí"],
+              "answer": ["Orúkọ", "mi", "ni", "Adé"],
+              "vocabIds": ["oruko", "mi", "ni"]
+            },
+            {
+              "type": "word_bank",
+              "direction": "en->yo",
+              "prompt": "What is your name?",
+              "tokens": ["Kí", "ni", "orúkọ", "rẹ", "mi", "dáadáa"],
+              "answer": ["Kí", "ni", "orúkọ", "rẹ"],
+              "vocabIds": ["kini", "oruko", "re"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Bẹ́ẹ̀ni",
+              "choices": ["Yes", "No", "Maybe", "Please"],
+              "answer": "Yes",
+              "vocabIds": ["beeni"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "Rárá",
+              "choices": ["No", "Yes", "Goodbye", "Thank you (informal)"],
+              "answer": "No",
+              "vocabIds": ["rara"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-2-family-things",
+      "titleYo": "Ìdílé àti Nǹkan",
+      "titleEn": "Family & Things",
+      "lessons": [
+        {
+          "id": "family-1",
+          "titleYo": "Ìdílé",
+          "titleEn": "Family",
+          "xp": 15,
+          "vocabIds": ["iya", "baba", "omo", "ile"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "ìyá",
+              "choices": ["mother", "father", "child", "house"],
+              "answer": "mother",
+              "vocabIds": ["iya"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "bàbá",
+              "choices": ["father", "mother", "market", "money"],
+              "answer": "father",
+              "vocabIds": ["baba"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "en->yo",
+              "prompt": "child",
+              "choices": ["ọmọ", "omi", "owó", "ọjà"],
+              "answer": "ọmọ",
+              "vocabIds": ["omo"],
+              "note": "ọ (with the dot) sounds like 'aw' in 'law'; o sounds like 'o' in 'go'."
+            },
+            {
+              "type": "match_pairs",
+              "pairs": [
+                { "yo": "ìyá", "en": "mother" },
+                { "yo": "bàbá", "en": "father" },
+                { "yo": "ọmọ", "en": "child" },
+                { "yo": "ilé", "en": "house" }
+              ],
+              "vocabIds": ["iya", "baba", "omo", "ile"]
+            }
+          ]
+        },
+        {
+          "id": "things-1",
+          "titleYo": "Nǹkan ojoojúmọ́",
+          "titleEn": "Everyday things",
+          "xp": 15,
+          "vocabIds": ["omi", "ounje", "owo", "oja"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "omi",
+              "choices": ["water", "food", "money", "market"],
+              "answer": "water",
+              "vocabIds": ["omi"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "oúnjẹ",
+              "choices": ["food", "water", "house", "name"],
+              "answer": "food",
+              "vocabIds": ["ounje"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "en->yo",
+              "prompt": "money",
+              "choices": ["owó", "omi", "ọjà", "ilé"],
+              "answer": "owó",
+              "vocabIds": ["owo"]
+            },
+            {
+              "type": "match_pairs",
+              "pairs": [
+                { "yo": "omi", "en": "water" },
+                { "yo": "oúnjẹ", "en": "food" },
+                { "yo": "owó", "en": "money" },
+                { "yo": "ọjà", "en": "market" }
+              ],
+              "vocabIds": ["omi", "ounje", "owo", "oja"]
+            }
+          ]
+        },
+        {
+          "id": "numbers-1",
+          "titleYo": "Àwọn nọ́mbà 1–5",
+          "titleEn": "Numbers 1–5",
+          "xp": 15,
+          "vocabIds": ["okan", "meji", "meta", "merin", "marun"],
+          "exercises": [
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "ọ̀kan",
+              "choices": ["one", "two", "three", "five"],
+              "answer": "one",
+              "vocabIds": ["okan"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "yo->en",
+              "prompt": "méjì",
+              "choices": ["two", "one", "four", "three"],
+              "answer": "two",
+              "vocabIds": ["meji"]
+            },
+            {
+              "type": "select_translation",
+              "direction": "en->yo",
+              "prompt": "three",
+              "choices": ["mẹ́ta", "mẹ́rin", "méjì", "márùn-ún"],
+              "answer": "mẹ́ta",
+              "vocabIds": ["meta"]
+            },
+            {
+              "type": "match_pairs",
+              "pairs": [
+                { "yo": "ọ̀kan", "en": "one" },
+                { "yo": "méjì", "en": "two" },
+                { "yo": "mẹ́ta", "en": "three" },
+                { "yo": "mẹ́rin", "en": "four" },
+                { "yo": "márùn-ún", "en": "five" }
+              ],
+              "vocabIds": ["okan", "meji", "meta", "merin", "marun"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
