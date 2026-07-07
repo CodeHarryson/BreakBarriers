@@ -2,6 +2,11 @@
 
 *Companion to [PRODUCT_RESEARCH.md](./PRODUCT_RESEARCH.md). Target: Yoruba, modeled on Duolingo's core loop, differentiated by the Immersion Contract.*
 
+> **Scope amendments (July 2026):**
+> 1. **Text-first MVP** — native-speaker audio recordings and content review are deferred past MVP; listening/speaking exercise types ship when they do. Content stays fully diacritized so audio can be layered on without rework.
+> 2. **iOS only** for the MVP (Android and web later; the Expo codebase keeps both cheap to add).
+> 3. **Prisma Postgres instead of Supabase** — a small Hono API in `server/` owns the Prisma client (React Native can't run Prisma directly). The app stays offline-first and pushes best-effort snapshots; identity is an anonymous device id until Sign in with Apple lands.
+
 ---
 
 ## 1. Product Definition

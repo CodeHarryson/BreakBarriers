@@ -10,17 +10,24 @@ spaced repetition, and the Immersion Contract.
 
 ## Stack
 
-- **App:** React Native + [Expo](https://expo.dev) (SDK 57), TypeScript, expo-router
+- **App:** React Native + [Expo](https://expo.dev) (SDK 57), TypeScript, expo-router — **iOS-first** (Android/web later)
 - **State:** zustand, persisted offline-first via AsyncStorage
 - **SRS:** [ts-fsrs](https://github.com/open-spaced-repetition/ts-fsrs) (FSRS scheduler, same family as Anki's default)
+- **Backend:** [`server/`](server/) — Hono API + Prisma 7 on Prisma Postgres; the app pushes best-effort profile snapshots and review logs (device is source of truth)
 - **Content:** versioned JSON course in [`content/`](content/), validated by `npm run validate:content`
 
 ## Getting started
 
 ```bash
 npm install
-npm start          # then press i (iOS simulator), a (Android), or w (web)
+cp .env.example .env   # points the app at the local sync server
+npm start              # then press i (iOS simulator)
+
+# in a second terminal — the sync API (needs server/.env with DATABASE_URL):
+cd server && npm install && npm run dev
 ```
+
+The app works fully offline; the server only powers cloud backup/restore.
 
 Useful scripts:
 
@@ -43,20 +50,30 @@ src/components/exercises/   # select-translation, word-bank, match-pairs
 src/lib/                    # content loader, FSRS wrapper, streak engine
 src/state/profile.ts        # persisted learner profile store
 src/data/wardrobe.ts        # avatar wardrobe (cowrie economy)
+src/lib/sync.ts             # debounced push sync to the API
 scripts/validate-content.mjs
+server/                     # Hono + Prisma sync API (Prisma Postgres)
 docs/                       # product research + implementation plan
 ```
 
-## Status (Phase 1 skeleton)
+## MVP scope decisions
+
+- **Text-first:** native-speaker audio and content review are deferred past MVP
+  (listening/speaking exercises land with them).
+- **iOS only** for now.
+- **Anonymous device identity:** sync keys off a generated device id; Sign in
+  with Apple replaces it post-MVP.
+
+## Status (Phase 1)
 
 Done: lesson engine (3 exercise types), course seed content (7 lessons,
-32 vocab — **pending native-speaker review**), FSRS practice queue, Iná streak
-with freezes, XP/levels, cowrie currency, avatar wardrobe with emoji
-placeholder art.
+32 vocab), FSRS practice queue, Iná streak with freezes, XP/levels, cowrie
+currency, avatar wardrobe with emoji placeholder art, Prisma-backed cloud
+sync (push + restore endpoints).
 
-Next (see the [implementation plan](docs/IMPLEMENTATION_PLAN.md)): native
-audio recordings, Supabase auth + sync, push notifications, hearts decision,
-then Phase 2's Immersion Contract and full Yorùbá UI locale.
+Next (see the [implementation plan](docs/IMPLEMENTATION_PLAN.md)): restore-on-
+reinstall flow, streak notifications, onboarding, TestFlight build, then
+Phase 2's Immersion Contract and full Yorùbá UI locale.
 
-> ⚠️ All Yorùbá strings in `content/` are seed data written for development
-> and must be reviewed by a native speaker before any release.
+> ⚠️ Yorùbá strings in `content/` are unreviewed seed data — good enough to
+> build against, but get a native-speaker pass before public release.

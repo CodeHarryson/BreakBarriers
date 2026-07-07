@@ -86,7 +86,7 @@ export const useProfile = create<ProfileState>()(
             reviewLog: [
               ...s.reviewLog,
               { vocabId, rating, reviewedAt: new Date().toISOString() },
-            ],
+            ].slice(-1000),
             streak: applyActivity(s.streak, dateKey()),
           };
         });

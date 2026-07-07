@@ -24,7 +24,7 @@ for (const v of course.vocab) {
   vocabIds.add(v.id);
   if (!v.yo || !v.en) errors.push(`vocab ${v.id}: missing yo/en`);
   if (v.yo && v.yo !== v.yo.normalize('NFC')) warnings.push(`vocab ${v.id}: yo string is not NFC-normalized`);
-  if (!v.audio) warnings.push(`vocab ${v.id}: no native-speaker audio yet`);
+  // Audio is out of MVP scope (text-first launch); becomes a warning again post-MVP.
 }
 
 // --- units/lessons/exercises ---

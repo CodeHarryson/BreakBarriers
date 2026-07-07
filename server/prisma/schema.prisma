@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// One row per install for the MVP (anonymous device identity).
+/// Real auth (Sign in with Apple) replaces deviceId as the primary identity later.
+model Learner {
+  id               String      @id @default(cuid())
+  deviceId         String      @unique
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  xp               Int         @default(0)
+  cowries          Int         @default(0)
+  currentStreak    Int         @default(0)
+  longestStreak    Int         @default(0)
+  streakFreezes    Int         @default(1)
+  lastActiveDate   String?
+  avatar           Json?
+  ownedItems       Json?
+  completedLessons Json?
+  srsDeck          Json?
+  reviewLogs       ReviewLog[]
+}
+
+/// Append-only review history — the raw material for FSRS parameter
+/// optimization in Phase 4.
+model ReviewLog {
+  id         String   @id @default(cuid())
+  learner    Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)
+  learnerId  String
+  vocabId    String
+  rating     Int
+  reviewedAt DateTime
+
+  @@unique([learnerId, vocabId, reviewedAt])
+  @@index([learnerId, reviewedAt])
+}
