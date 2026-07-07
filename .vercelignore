@@ -1,0 +1,17 @@
+# Only the API function + server source are needed; never upload secrets.
+.env
+.env.*
+server/.env
+node_modules
+server/node_modules
+.git
+.expo
+dist
+ios
+android
+assets
+src
+content
+docs
+scripts
+*.png
