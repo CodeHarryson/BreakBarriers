@@ -13,7 +13,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { getLesson } from '@/lib/content';
-import { COWRIES_PER_LESSON, useProfile } from '@/state/profile';
+import { requestNotificationPermission } from '@/lib/notifications';
+import { COWRIES_PER_LESSON, PERFECT_BONUS_COWRIES, useProfile } from '@/state/profile';
 import type { Exercise } from '@/types/content';
 
 export default function LessonScreen() {
@@ -28,6 +29,7 @@ export default function LessonScreen() {
   // Captured at completion time: the store flips completedLessons before the
   // summary renders, so reading `alreadyDone` there would show the repeat reward.
   const [cowriesEarned, setCowriesEarned] = useState(COWRIES_PER_LESSON);
+  const [wasPerfect, setWasPerfect] = useState(false);
 
   const entry = id ? getLesson(id) : undefined;
   if (!entry) {
@@ -47,11 +49,18 @@ export default function LessonScreen() {
     if (index + 1 < total) {
       setIndex(index + 1);
     } else {
-      setCowriesEarned(alreadyDone ? 2 : COWRIES_PER_LESSON);
-      completeLesson(lesson.id);
+      const finalCorrect = correctCount + (correct ? 1 : 0);
+      const perfect = finalCorrect === total;
+      setWasPerfect(perfect);
+      setCowriesEarned(
+        (alreadyDone ? 2 : COWRIES_PER_LESSON) + (perfect ? PERFECT_BONUS_COWRIES : 0),
+      );
+      completeLesson(lesson.id, perfect);
       if (Platform.OS !== 'web') {
         void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
+      // The celebration moment is the right time to ask for reminder permission.
+      void requestNotificationPermission();
       setFinished(true);
     }
   };
@@ -66,11 +75,12 @@ export default function LessonScreen() {
             </Animated.View>
             <Animated.View entering={FadeInUp.delay(150).duration(300)}>
               <ThemedText type="subtitle" style={styles.centered}>
-                Kú iṣẹ́! Lesson complete
+                {wasPerfect ? 'Pípé! Perfect lesson' : 'Kú iṣẹ́! Lesson complete'}
               </ThemedText>
             </Animated.View>
             <ThemedText themeColor="textSecondary" style={styles.centered}>
               {correctCount}/{total} correct · +{lesson.xp} XP · +{cowriesEarned} 🐚
+              {wasPerfect ? ` (incl. +${PERFECT_BONUS_COWRIES} perfect bonus)` : ''}
             </ThemedText>
             <Pressable
               accessibilityRole="button"

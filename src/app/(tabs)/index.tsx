@@ -1,5 +1,7 @@
 import { Redirect, useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Palette } from '@/components/exercises/exercise-footer';
@@ -9,16 +11,32 @@ import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { course, isLessonUnlocked } from '@/lib/content';
 import { dateKey, effectiveStreak } from '@/lib/streak';
-import { levelForXp, useProfile } from '@/state/profile';
+import { CHEST_REWARDS, levelForXp, useProfile, weekKey } from '@/state/profile';
 
 export default function LearnScreen() {
   const router = useRouter();
-  const { xp, cowries, streak, completedLessons, onboarded, dailyGoalXp, xpToday, xpTodayDate } =
-    useProfile();
+  const {
+    xp,
+    cowries,
+    streak,
+    completedLessons,
+    onboarded,
+    dailyGoalXp,
+    xpToday,
+    xpTodayDate,
+    chestLastClaim,
+    chestWeekKey,
+    chestDayIndex,
+    claimChest,
+  } = useProfile();
+  const [justClaimed, setJustClaimed] = useState<number | null>(null);
 
   if (!onboarded) return <Redirect href="/onboarding" />;
 
   const earnedToday = xpTodayDate === dateKey() ? xpToday : 0;
+  const chestAvailable = chestLastClaim !== dateKey();
+  const chestDay = chestWeekKey === weekKey() ? chestDayIndex : 0;
+  const chestReward = CHEST_REWARDS[Math.min(chestDay, CHEST_REWARDS.length - 1)];
 
   return (
     <ThemedView style={styles.container}>
@@ -40,6 +58,38 @@ export default function LearnScreen() {
         </View>
 
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          {(chestAvailable || justClaimed !== null) && (
+            <Pressable
+              accessibilityRole="button"
+              disabled={!chestAvailable}
+              onPress={() => setJustClaimed(claimChest())}>
+              <ThemedView
+                type="backgroundElement"
+                style={[styles.chest, justClaimed !== null && { borderColor: Palette.amber, borderWidth: 2 }]}>
+                {justClaimed !== null ? (
+                  <Animated.View entering={FadeIn.duration(250)} style={styles.chestInner}>
+                    <ThemedText style={styles.chestEmoji}>✨</ThemedText>
+                    <View>
+                      <ThemedText type="smallBold">+{justClaimed} 🐚 collected!</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        Day {Math.min(chestDayIndex, CHEST_REWARDS.length)} of 7 — bigger every day
+                      </ThemedText>
+                    </View>
+                  </Animated.View>
+                ) : (
+                  <View style={styles.chestInner}>
+                    <ThemedText style={styles.chestEmoji}>🎁</ThemedText>
+                    <View>
+                      <ThemedText type="smallBold">Daily chest · +{chestReward} 🐚</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        Day {chestDay + 1} of 7 — tap to open
+                      </ThemedText>
+                    </View>
+                  </View>
+                )}
+              </ThemedView>
+            </Pressable>
+          )}
           {course.units.map((unit) => (
             <View key={unit.id} style={styles.unit}>
               <ThemedText type="smallBold" themeColor="textSecondary" style={styles.unitTitle}>
@@ -109,6 +159,19 @@ const styles = StyleSheet.create({
   scroll: {
     gap: Spacing.four,
     paddingBottom: BottomTabInset + Spacing.five,
+  },
+  chest: {
+    borderRadius: 16,
+    padding: Spacing.three,
+  },
+  chestInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+  },
+  chestEmoji: {
+    fontSize: 28,
+    lineHeight: 36,
   },
   unit: {
     gap: Spacing.two,

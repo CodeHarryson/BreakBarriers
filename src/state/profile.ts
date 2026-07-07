@@ -25,6 +25,18 @@ export const XP_PER_REVIEW = 2;
 export const DEFAULT_DAILY_GOAL_XP = 20;
 export const FREEZE_COST_COWRIES = 25;
 export const MAX_FREEZES = 2;
+export const PERFECT_BONUS_COWRIES = 5;
+/** Escalating daily login chest across a Mon–Sun week. */
+export const CHEST_REWARDS = [3, 4, 5, 6, 8, 10, 15] as const;
+
+/** Monday date key of the week containing `today` (chest reset boundary). */
+export function weekKey(today: string = dateKey()): string {
+  const [y, m, d] = today.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  const dow = (date.getDay() + 6) % 7; // Monday = 0
+  date.setDate(date.getDate() - dow);
+  return dateKey(date);
+}
 
 export function levelForXp(xp: number): number {
   return Math.floor(xp / XP_PER_LEVEL) + 1;
@@ -58,8 +70,12 @@ interface ProfileState {
   dailyGoalXp: number;
   xpToday: number;
   xpTodayDate: string;
+  chestLastClaim: string | null;
+  chestWeekKey: string;
+  chestDayIndex: number;
 
-  completeLesson: (lessonId: string) => void;
+  completeLesson: (lessonId: string, perfect?: boolean) => void;
+  claimChest: () => number | null;
   reviewVocab: (vocabId: string, rating: Rating.Again | Rating.Hard | Rating.Good | Rating.Easy) => void;
   buyItem: (itemId: string) => boolean;
   buyStreakFreeze: () => boolean;
@@ -97,8 +113,11 @@ export const useProfile = create<ProfileState>()(
       dailyGoalXp: DEFAULT_DAILY_GOAL_XP,
       xpToday: 0,
       xpTodayDate: dateKey(),
+      chestLastClaim: null,
+      chestWeekKey: weekKey(),
+      chestDayIndex: 0,
 
-      completeLesson: (lessonId) => {
+      completeLesson: (lessonId, perfect = false) => {
         const entry = getLesson(lessonId);
         if (!entry) return;
         const { lesson } = entry;
@@ -110,12 +129,31 @@ export const useProfile = create<ProfileState>()(
           }
           return {
             ...xpGain(s, lesson.xp),
-            cowries: s.cowries + (firstCompletion ? COWRIES_PER_LESSON : 2),
+            cowries:
+              s.cowries +
+              (firstCompletion ? COWRIES_PER_LESSON : 2) +
+              (perfect ? PERFECT_BONUS_COWRIES : 0),
             streak: applyActivity(s.streak, dateKey()),
             completedLessons: { ...s.completedLessons, [lessonId]: true },
             srsDeck: deck,
           };
         });
+      },
+
+      claimChest: () => {
+        const s = get();
+        const today = dateKey();
+        if (s.chestLastClaim === today) return null;
+        const wk = weekKey(today);
+        const dayIndex = s.chestWeekKey === wk ? s.chestDayIndex : 0;
+        const reward = CHEST_REWARDS[Math.min(dayIndex, CHEST_REWARDS.length - 1)];
+        set({
+          cowries: s.cowries + reward,
+          chestLastClaim: today,
+          chestWeekKey: wk,
+          chestDayIndex: dayIndex + 1,
+        });
+        return reward;
       },
 
       reviewVocab: (vocabId, rating) => {

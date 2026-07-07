@@ -67,16 +67,16 @@ Shipped ahead of schedule, all committed:
 
 **Goal:** the app pulls you back tomorrow.
 
-| Pts | Item | Acceptance criteria |
-|---|---|---|
-| 🔑 2 | Create Expo account, `eas init`, iOS credentials | `eas build --profile development` succeeds |
-| 🔑 3 | Enroll in Apple Developer Program ($99 — approval can take days, **do this Monday**) | Enrollment confirmed |
-| 3 | Local streak-reminder notifications (evening, only if today's goal unmet), streak-in-danger copy in Yorùbá+English | Fires at 19:00 local; deep-links to Learn |
-| 3 | Practice-due notification (morning, only if ≥5 cards due) | Fires ≤1×/day; respects permission denial gracefully |
-| 3 | Development build on physical iPhone (dev client) | Daily-drivable on Harry's phone |
-| 2 | Deploy `server/` (Fly.io or Railway free tier) + point `EXPO_PUBLIC_API_URL` at it | Sync works away from the dev Mac |
-| 2 | Weekly cowrie chest (login bonus escalating across the week) | Chest state survives restart; resets weekly |
-| 2 | Perfect-lesson bonus (+5 🐚 for 100%) with celebration | Shows only on 100% first-try answers |
+| Status | Pts | Item | Acceptance criteria |
+|---|---|---|---|
+| [!] | 🔑 2 | Create Expo account, `eas init`, iOS credentials | `eas build --profile development` succeeds |
+| [!] | 🔑 3 | Enroll in Apple Developer Program ($99 — approval can take days, **do this ASAP**) | Enrollment confirmed |
+| [x] | 3 | Local streak-reminder notifications (evening, only if today's goal unmet), Yorùbá+English copy | Next 19:00 slot; reschedules on profile changes; permission asked at first lesson-complete |
+| [x] | 3 | Practice-due notification (morning, only if ≥5 cards due) | 09:00 next day; skips below threshold; silent without permission |
+| [!] | 3 | Development build on physical iPhone (dev client) | Blocked on Expo + Apple accounts |
+| [~] | 2 | Deploy `server/` (Fly.io free tier) + point `EXPO_PUBLIC_API_URL` at it | Dockerfile + fly.toml ready; needs 🔑 Fly.io account, then `fly launch` |
+| [x] | 2 | Weekly cowrie chest (escalating 3→15 🐚 across Mon–Sun, resets weekly) | Chest card on Learn; state survives restart |
+| [x] | 2 | Perfect-lesson bonus (+5 🐚 for 100%) with celebration | "Pípé!" summary variant, bonus itemized |
 
 ## 6. Sprint 3 — Content depth (Jul 20 → Jul 24) · 21 pts
 
@@ -99,8 +99,8 @@ Shipped ahead of schedule, all committed:
 | Pts | Item | Acceptance criteria |
 |---|---|---|
 | 🔑 2 | App Store Connect app record, TestFlight internal group | Build visible in TestFlight |
-| 🔑 2 | Decide avatar art direction (2D flat recommended) + commission first 8 wardrobe items OR bless emoji for beta | Decision recorded; assets ordered if commissioned |
-| 3 | App icon + splash (àdìrẹ-pattern placeholder is fine) & display name | Passes App Store asset validation |
+| 🔑 2 | Decide avatar art direction + commission per [AVATAR_SPEC.md](./AVATAR_SPEC.md) (layered 2D: free identity layers — 8 skins/10 hair —, paid wardrobe layers) OR bless emoji for beta | Decision recorded; assets ordered if commissioned |
+| 3 | App icon + splash (àdìrẹ-pattern placeholder is fine) & display name — **current UI is the functional skeleton, not final design**; this + avatar art is where visual identity lands | Passes App Store asset validation |
 | 3 | PostHog: session, lesson_start/complete, review_done, streak_day, contract events schema | Events visible in dashboard |
 | 3 | Sentry crash reporting + source maps | Test crash symbolicated |
 | 3 | `eas build` production profile + TestFlight submission pipeline (`eas submit`) | One-command ship |
