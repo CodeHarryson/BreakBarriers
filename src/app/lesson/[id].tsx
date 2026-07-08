@@ -5,9 +5,11 @@ import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInUp, ZoomIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { FreeText } from '@/components/exercises/free-text';
 import { MatchPairs } from '@/components/exercises/match-pairs';
 import { Palette } from '@/components/exercises/exercise-footer';
 import { SelectTranslation } from '@/components/exercises/select-translation';
+import { ToneDrill } from '@/components/exercises/tone-drill';
 import { WordBank } from '@/components/exercises/word-bank';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -135,6 +137,10 @@ function ExerciseSwitch({
       return <WordBank exercise={exercise} onComplete={onComplete} />;
     case 'match_pairs':
       return <MatchPairs exercise={exercise} onComplete={onComplete} />;
+    case 'free_text':
+      return <FreeText exercise={exercise} onComplete={onComplete} />;
+    case 'tone_drill':
+      return <ToneDrill exercise={exercise} onComplete={onComplete} />;
   }
 }
 

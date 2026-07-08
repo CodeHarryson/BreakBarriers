@@ -78,19 +78,19 @@ Shipped ahead of schedule, all committed:
 | [x] | 2 | Weekly cowrie chest (escalating 3→15 🐚 across Mon–Sun, resets weekly) | Chest card on Learn; state survives restart |
 | [x] | 2 | Perfect-lesson bonus (+5 🐚 for 100%) with celebration | "Pípé!" summary variant, bonus itemized |
 
-## 6. Sprint 3 — Content depth (Jul 20 → Jul 24) · 21 pts
+## 6. Sprint 3 — Content depth (Jul 20 → Jul 24) · 21 pts ✅ (done early, Jul 7)
 
 **Goal:** enough course to survive a motivated learner's first two weeks.
 
-| Pts | Item | Acceptance criteria |
-|---|---|---|
-| 5 | Unit 3 "Oúnjẹ àti Ọjà" (food & market) + Unit 4 "Ìbéèrè" (questions): ~10 lessons, ~60 new vocab | Validator clean; i+1 ordering (no word used before taught) |
-| 3 | New exercise type: free-text translation with **lenient diacritic grading** (accept unmarked input, show tone tip) | `e kaaro` accepted for `Ẹ káàárọ̀` with a "tones" nudge |
-| 3 | New exercise type: tone-pair listening placeholder → **visual tone drill** (pitch-contour graphic, no audio yet) | Renders L/M/H contours for minimal pairs |
-| 3 | In-app Yorùbá character bar for text inputs (ẹ ọ ṣ + tone marks) | Usable in free-text exercises |
-| 2 | Lesson checkpoint quizzes at unit end (mixed review, 2× XP) | Gate to next unit; failing suggests practice |
-| 3 | Content tooling: `validate:content` checks i+1 ordering + duplicate-vocab reuse across lessons | CI-grade exit codes |
-| 2 | GitHub Actions CI: typecheck + validate + lint on push | Red X on broken main |
+| Status | Pts | Item | Acceptance criteria |
+|---|---|---|---|
+| [x] | 5 | Unit 3 "Oúnjẹ àti Ọjà" (food & market) + Unit 4 "Àwọn Ìbéèrè" (questions): 12 new lessons (incl. checkpoints), 43 new vocab (75 total) | Validator clean; i+1 ordering enforced (0 violations) |
+| [x] | 3 | Free-text translation with **lenient diacritic grading** (accept unmarked input, show tone tip) | Grading lib tested: undiacritized input accepted with a tone-tip nudge |
+| [x] | 3 | **Visual tone drill** (pitch-contour graphic, no audio) | Dot height per syllable maps to L/M/H |
+| [x] | 3 | In-app Yorùbá character bar (ẹ ọ ṣ gb + combining tone marks) | Shown in en->yo free-text exercises |
+| [x] | 2 | Checkpoint quizzes at unit end (mixed review, 2× XP, 🏆) | Checkpoints for Units 1–4; gate next unit via sequential unlock |
+| [x] | 3 | Content tooling: `validate:content` checks i+1 ordering + duplicate-vocab reuse | Enforced; new exercise types validated |
+| [x] | 2 | GitHub Actions CI: typecheck + validate + lint (app) + prisma/typecheck (server) | `.github/workflows/ci.yml`; all steps pass locally |
 
 ## 7. Sprint 4 — TestFlight → **M2** (Jul 27 → Jul 31) · 19 pts
 

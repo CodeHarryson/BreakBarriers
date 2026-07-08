@@ -98,6 +98,7 @@ export default function LearnScreen() {
               {unit.lessons.map((lesson) => {
                 const done = completedLessons[lesson.id] === true;
                 const unlocked = isLessonUnlocked(lesson.id, completedLessons);
+                const isCheckpoint = lesson.kind === 'checkpoint';
                 return (
                   <Pressable
                     accessibilityRole="button"
@@ -107,14 +108,17 @@ export default function LearnScreen() {
                     style={[
                       styles.lesson,
                       done && { borderColor: Palette.green, borderWidth: 2 },
+                      isCheckpoint && !done && unlocked && { borderColor: Palette.amber, borderWidth: 2 },
                       !unlocked && { opacity: 0.4 },
                     ]}>
                     <ThemedView type="backgroundElement" style={styles.lessonInner}>
                       <ThemedText type="subtitle" style={styles.lessonEmoji}>
-                        {done ? '✅' : unlocked ? '📖' : '🔒'}
+                        {done ? '✅' : !unlocked ? '🔒' : isCheckpoint ? '🏆' : '📖'}
                       </ThemedText>
                       <View style={styles.lessonText}>
-                        <ThemedText type="smallBold">{lesson.titleYo}</ThemedText>
+                        <ThemedText type="smallBold">
+                          {isCheckpoint ? `${lesson.titleYo} (Checkpoint)` : lesson.titleYo}
+                        </ThemedText>
                         <ThemedText type="small" themeColor="textSecondary">
                           {lesson.titleEn} · {lesson.xp} XP
                         </ThemedText>

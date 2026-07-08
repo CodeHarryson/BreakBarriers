@@ -44,16 +44,43 @@ export interface MatchPairsExercise {
   vocabIds: string[];
 }
 
+export interface FreeTextExercise {
+  type: 'free_text';
+  /** 'yo->en' typed in English; 'en->yo' typed in Yorùbá (character bar shown). */
+  direction: 'yo->en' | 'en->yo';
+  prompt: string;
+  /** Canonical answer first (shown as "correct answer"); extras are variants. */
+  accepted: string[];
+  vocabIds: string[];
+  note?: string;
+}
+
+export interface ToneDrillExercise {
+  type: 'tone_drill';
+  prompt: string; // the Yorùbá word, fully diacritized
+  /** One of L/M/H per syllable, matching the rendered contour. */
+  tones: ('L' | 'M' | 'H')[];
+  syllables: string[];
+  choices: string[];
+  answer: string;
+  vocabIds: string[];
+  note?: string;
+}
+
 export type Exercise =
   | SelectTranslationExercise
   | WordBankExercise
-  | MatchPairsExercise;
+  | MatchPairsExercise
+  | FreeTextExercise
+  | ToneDrillExercise;
 
 export interface Lesson {
   id: string;
   titleYo: string;
   titleEn: string;
   xp: number;
+  /** 'checkpoint' = unit-end mixed review (2× XP); gates the next unit. */
+  kind?: 'lesson' | 'checkpoint';
   exercises: Exercise[];
   /** Vocab introduced here; seeds the learner's SRS deck on completion. */
   vocabIds: string[];
