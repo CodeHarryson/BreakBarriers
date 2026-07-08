@@ -109,12 +109,21 @@ export default function LessonScreen() {
         ) : (
           <>
             <View style={styles.topBar}>
-              <Pressable accessibilityRole="button" onPress={() => router.back()} hitSlop={12}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Close lesson"
+                onPress={() => router.back()}
+                hitSlop={12}>
                 <ThemedText type="subtitle" themeColor="textSecondary">
                   ✕
                 </ThemedText>
               </Pressable>
-              <View style={styles.progressTrack}>
+              <View
+                accessible
+                accessibilityRole="progressbar"
+                accessibilityLabel="Lesson progress"
+                accessibilityValue={{ min: 0, max: total, now: index }}
+                style={styles.progressTrack}>
                 <View
                   style={[
                     styles.progressFill,

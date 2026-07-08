@@ -82,6 +82,8 @@ export default function OnboardingScreen() {
               {MOTIVATIONS.map((m) => (
                 <Pressable
                   accessibilityRole="button"
+                  accessibilityLabel={m.label}
+                  accessibilityState={{ selected: motivation === m.id }}
                   key={m.id}
                   onPress={() => setMotivation(m.id)}
                   style={[styles.option, motivation === m.id && styles.optionSelected]}>
@@ -109,9 +111,11 @@ export default function OnboardingScreen() {
               Earn cowries 🐚 to dress them in aṣọ òkè, gèlè, and more.
             </ThemedText>
             <View style={styles.baseRow}>
-              {AVATAR_BASES.map((b) => (
+              {AVATAR_BASES.map((b, i) => (
                 <Pressable
                   accessibilityRole="button"
+                  accessibilityLabel={`Avatar option ${i + 1}`}
+                  accessibilityState={{ selected: base === b }}
                   key={b}
                   onPress={() => setBase(b)}
                   style={[styles.baseChoice, base === b && styles.baseSelected]}>

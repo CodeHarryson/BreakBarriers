@@ -39,6 +39,7 @@ export function FreeText({ exercise, onComplete }: Props) {
         value={value}
         onChangeText={setValue}
         editable={result === null}
+        accessibilityLabel={`Translate ${exercise.prompt} into ${toYoruba ? 'Yoruba' : 'English'}`}
         placeholder={toYoruba ? 'Àpèsì rẹ…' : 'Your answer…'}
         placeholderTextColor={theme.textSecondary}
         autoCapitalize="none"

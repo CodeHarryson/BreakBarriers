@@ -46,9 +46,15 @@ export default function LearnScreen() {
           <GoalRing earned={earnedToday} goal={dailyGoalXp} size={56} />
           <View style={styles.statsCol}>
             <View style={styles.statsInner}>
-              <ThemedText type="smallBold">🔥 {effectiveStreak(streak)}</ThemedText>
-              <ThemedText type="smallBold">🐚 {cowries}</ThemedText>
-              <ThemedText type="smallBold">⭐ Lv {levelForXp(xp)}</ThemedText>
+              <ThemedText type="smallBold" accessibilityLabel={`${effectiveStreak(streak)} day streak`}>
+                🔥 {effectiveStreak(streak)}
+              </ThemedText>
+              <ThemedText type="smallBold" accessibilityLabel={`${cowries} cowries`}>
+                🐚 {cowries}
+              </ThemedText>
+              <ThemedText type="smallBold" accessibilityLabel={`Level ${levelForXp(xp)}`}>
+                ⭐ Lv {levelForXp(xp)}
+              </ThemedText>
             </View>
             <ThemedText type="small" themeColor="textSecondary">
               {earnedToday >= dailyGoalXp
@@ -107,6 +113,10 @@ export default function LearnScreen() {
                 return (
                   <Pressable
                     accessibilityRole="button"
+                    accessibilityLabel={`${isCheckpoint ? 'Checkpoint: ' : ''}${lesson.titleYo}, ${lesson.titleEn}. ${lesson.xp} XP. ${
+                      done ? 'Completed' : !unlocked ? 'Locked' : 'Not started'
+                    }`}
+                    accessibilityState={{ disabled: !unlocked }}
                     key={lesson.id}
                     disabled={!unlocked}
                     onPress={() => router.push(`/lesson/${lesson.id}`)}

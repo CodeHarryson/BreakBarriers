@@ -8,7 +8,6 @@
     "scheme": "breakbarriers",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.codeharry.breakbarriers",
       "supportsTablet": false
     },
@@ -30,9 +29,10 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#4B3F72",
+          "dark": { "backgroundColor": "#332B52" },
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 200
         }
       ],
       "@sentry/react-native"

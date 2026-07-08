@@ -21,7 +21,16 @@ export function GoalRing({ earned, goal, size = 64 }: Props) {
   const met = earned >= goal;
 
   return (
-    <View style={[styles.container, { width: size, height: size }]}>
+    <View
+      accessible
+      accessibilityRole="progressbar"
+      accessibilityLabel={
+        met
+          ? `Daily goal met: ${earned} of ${goal} XP`
+          : `Daily goal: ${earned} of ${goal} XP`
+      }
+      accessibilityValue={{ min: 0, max: goal, now: Math.min(earned, goal) }}
+      style={[styles.container, { width: size, height: size }]}>
       <Svg width={size} height={size}>
         <Circle
           cx={size / 2}

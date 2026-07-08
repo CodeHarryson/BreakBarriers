@@ -73,6 +73,12 @@ export default function ProfileScreen() {
             </View>
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel={
+                streak.freezes >= MAX_FREEZES
+                  ? 'Streak freezes full'
+                  : `Buy streak freeze for ${FREEZE_COST_COWRIES} cowries`
+              }
+              accessibilityState={{ disabled: !canBuyFreeze }}
               disabled={!canBuyFreeze}
               onPress={buyStreakFreeze}
               style={[
@@ -89,9 +95,11 @@ export default function ProfileScreen() {
             FACE
           </ThemedText>
           <View style={styles.baseRow}>
-            {AVATAR_BASES.map((base) => (
+            {AVATAR_BASES.map((base, i) => (
               <Pressable
                 accessibilityRole="button"
+                accessibilityLabel={`Face option ${i + 1}`}
+                accessibilityState={{ selected: avatar.base === base }}
                 key={base}
                 onPress={() => setAvatarBase(base)}
                 style={[styles.baseChoice, avatar.base === base && styles.baseSelected]}>
@@ -124,6 +132,19 @@ export default function ProfileScreen() {
                 </View>
                 <Pressable
                   accessibilityRole="button"
+                  accessibilityLabel={
+                    locked
+                      ? `${item.nameEn} locked until level ${item.unlockLevel}`
+                      : equipped
+                        ? `${item.nameEn} equipped, tap to remove`
+                        : owned
+                          ? `Equip ${item.nameEn}`
+                          : `Buy ${item.nameEn} for ${item.costCowries} cowries`
+                  }
+                  accessibilityState={{
+                    disabled: locked || (owned && equipped && item.costCowries === 0),
+                    selected: equipped,
+                  }}
                   disabled={locked || (owned && equipped && item.costCowries === 0)}
                   onPress={() => {
                     if (!owned) {
@@ -160,8 +181,10 @@ export default function ProfileScreen() {
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
+  // Strip the leading emoji so VoiceOver reads "streak, 5" not "fire, 5".
+  const spoken = value.replace(/^[^0-9]*/, '').trim();
   return (
-    <ThemedView type="backgroundElement" style={styles.stat}>
+    <ThemedView accessible accessibilityLabel={`${label}: ${spoken}`} type="backgroundElement" style={styles.stat}>
       <ThemedText type="smallBold">{value}</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
         {label}
