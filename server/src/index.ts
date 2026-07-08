@@ -2,6 +2,8 @@
  * Local / Docker / Fly entry point. Vercel deployments use /api at the repo
  * root instead. The API itself lives in src/app.ts.
  */
+import 'dotenv/config';
+
 import { serve } from '@hono/node-server';
 
 import { app } from './app.js';

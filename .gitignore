@@ -45,3 +45,5 @@ example
 # env secrets
 .env
 server/.env
+.vercel
+.env*

@@ -1,17 +1,19 @@
-# Only the API function + server source are needed; never upload secrets.
+# Root-anchored: only the API function + server source get uploaded.
+# Never upload secrets or the mobile app.
 .env
 .env.*
 server/.env
 node_modules
 server/node_modules
+server/prisma.config.ts
 .git
 .expo
-dist
-ios
-android
-assets
-src
-content
-docs
-scripts
+/dist
+/ios
+/android
+/assets
+/src
+/content
+/docs
+/scripts
 *.png

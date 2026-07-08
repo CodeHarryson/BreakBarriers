@@ -74,7 +74,7 @@ Shipped ahead of schedule, all committed:
 | [x] | 3 | Local streak-reminder notifications (evening, only if today's goal unmet), Yorùbá+English copy | Next 19:00 slot; reschedules on profile changes; permission asked at first lesson-complete |
 | [x] | 3 | Practice-due notification (morning, only if ≥5 cards due) | 09:00 next day; skips below threshold; silent without permission |
 | [!] | 3 | Development build on physical iPhone (dev client) | Blocked on Expo + Apple accounts |
-| [~] | 2 | Deploy `server/` (Fly.io free tier) + point `EXPO_PUBLIC_API_URL` at it | Dockerfile + fly.toml ready; needs 🔑 Fly.io account, then `fly launch` |
+| [x] | 2 | Deploy `server/` + point `EXPO_PUBLIC_API_URL` at it | **Live on Vercel (free)**: breakbarriers-api.vercel.app/api — round-trip verified; Fly config kept as fallback |
 | [x] | 2 | Weekly cowrie chest (escalating 3→15 🐚 across Mon–Sun, resets weekly) | Chest card on Learn; state survives restart |
 | [x] | 2 | Perfect-lesson bonus (+5 🐚 for 100%) with celebration | "Pípé!" summary variant, bonus itemized |
 

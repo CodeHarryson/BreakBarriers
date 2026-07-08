@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace"
+import type * as Prisma from "./prismaNamespace.js"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.8.0",
   "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n/// One row per install for the MVP (anonymous device identity).\n/// Real auth (Sign in with Apple) replaces deviceId as the primary identity later.\nmodel Learner {\n  id               String      @id @default(cuid())\n  deviceId         String      @unique\n  createdAt        DateTime    @default(now())\n  updatedAt        DateTime    @updatedAt\n  xp               Int         @default(0)\n  cowries          Int         @default(0)\n  currentStreak    Int         @default(0)\n  longestStreak    Int         @default(0)\n  streakFreezes    Int         @default(1)\n  lastActiveDate   String?\n  avatar           Json?\n  ownedItems       Json?\n  completedLessons Json?\n  srsDeck          Json?\n  reviewLogs       ReviewLog[]\n}\n\n/// Append-only review history — the raw material for FSRS parameter\n/// optimization in Phase 4.\nmodel ReviewLog {\n  id         String   @id @default(cuid())\n  learner    Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)\n  learnerId  String\n  vocabId    String\n  rating     Int\n  reviewedAt DateTime\n\n  @@unique([learnerId, vocabId, reviewedAt])\n  @@index([learnerId, reviewedAt])\n}\n",
+  "inlineSchema": "generator client {\n  provider            = \"prisma-client\"\n  output              = \"../src/generated/prisma\"\n  moduleFormat        = \"esm\"\n  importFileExtension = \"js\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n/// One row per install for the MVP (anonymous device identity).\n/// Real auth (Sign in with Apple) replaces deviceId as the primary identity later.\nmodel Learner {\n  id               String      @id @default(cuid())\n  deviceId         String      @unique\n  createdAt        DateTime    @default(now())\n  updatedAt        DateTime    @updatedAt\n  xp               Int         @default(0)\n  cowries          Int         @default(0)\n  currentStreak    Int         @default(0)\n  longestStreak    Int         @default(0)\n  streakFreezes    Int         @default(1)\n  lastActiveDate   String?\n  avatar           Json?\n  ownedItems       Json?\n  completedLessons Json?\n  srsDeck          Json?\n  reviewLogs       ReviewLog[]\n}\n\n/// Append-only review history — the raw material for FSRS parameter\n/// optimization in Phase 4.\nmodel ReviewLog {\n  id         String   @id @default(cuid())\n  learner    Learner  @relation(fields: [learnerId], references: [id], onDelete: Cascade)\n  learnerId  String\n  vocabId    String\n  rating     Int\n  reviewedAt DateTime\n\n  @@unique([learnerId, vocabId, reviewedAt])\n  @@index([learnerId, reviewedAt])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},

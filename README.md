@@ -13,7 +13,7 @@ spaced repetition, and the Immersion Contract.
 - **App:** React Native + [Expo](https://expo.dev) (SDK 57), TypeScript, expo-router — **iOS-first** (Android/web later)
 - **State:** zustand, persisted offline-first via AsyncStorage
 - **SRS:** [ts-fsrs](https://github.com/open-spaced-repetition/ts-fsrs) (FSRS scheduler, same family as Anki's default)
-- **Backend:** [`server/`](server/) — Hono API + Prisma 7 on Prisma Postgres; the app pushes best-effort profile snapshots and review logs (device is source of truth)
+- **Backend:** [`server/`](server/) — Hono API + Prisma 7 on Prisma Postgres, deployed at `https://breakbarriers-api.vercel.app/api` (Vercel function via root [`api/`](api/); Docker/Fly config kept as an alternative). The app pushes best-effort profile snapshots and review logs (device is source of truth). Deploy: `npx vercel build --prod && npx vercel deploy --prebuilt --prod` (prebuilt avoids remote-build bundling issues with the nested server package).
 - **Content:** versioned JSON course in [`content/`](content/), validated by `npm run validate:content`
 
 ## Getting started

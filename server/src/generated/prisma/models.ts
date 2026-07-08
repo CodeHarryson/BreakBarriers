@@ -8,6 +8,6 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Learner'
-export type * from './models/ReviewLog'
-export type * from './commonInputTypes'
+export type * from './models/Learner.js'
+export type * from './models/ReviewLog.js'
+export type * from './commonInputTypes.js'
