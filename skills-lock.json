@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "memory-management": {
+      "source": "ruvnet/ruflo",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/memory-management/SKILL.md",
+      "computedHash": "32f066997716d3b933a102537f7eb603381fab81eca8d2a888b9d7b0cc07416c"
+    }
+  }
+}

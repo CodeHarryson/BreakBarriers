@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, { FadeInUp, ZoomIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ import { WordBank } from '@/components/exercises/word-bank';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { track } from '@/lib/analytics';
 import { getLesson } from '@/lib/content';
 import { requestNotificationPermission } from '@/lib/notifications';
 import { COWRIES_PER_LESSON, PERFECT_BONUS_COWRIES, useProfile } from '@/state/profile';
@@ -34,6 +35,13 @@ export default function LessonScreen() {
   const [wasPerfect, setWasPerfect] = useState(false);
 
   const entry = id ? getLesson(id) : undefined;
+  const lessonKind = entry?.lesson.kind ?? 'lesson';
+
+  useEffect(() => {
+    if (id && entry) track('lesson_started', { lessonId: id, kind: lessonKind });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   if (!entry) {
     return (
       <ThemedView style={styles.container}>
@@ -58,6 +66,13 @@ export default function LessonScreen() {
         (alreadyDone ? 2 : COWRIES_PER_LESSON) + (perfect ? PERFECT_BONUS_COWRIES : 0),
       );
       completeLesson(lesson.id, perfect);
+      track('lesson_completed', {
+        lessonId: lesson.id,
+        kind: lessonKind,
+        correct: finalCorrect,
+        total,
+        perfect,
+      });
       if (Platform.OS !== 'web') {
         void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }

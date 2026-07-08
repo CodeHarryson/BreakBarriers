@@ -6,6 +6,7 @@ import { Palette } from '@/components/exercises/exercise-footer';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { track } from '@/lib/analytics';
 import { getVocab } from '@/lib/content';
 import { Rating } from '@/lib/srs';
 import { useProfile } from '@/state/profile';
@@ -29,6 +30,7 @@ export default function PracticeScreen() {
   const grade = (rating: (typeof GRADES)[number]['rating']) => {
     if (!currentId) return;
     reviewVocab(currentId, rating);
+    track('review_completed', { rating });
     setRevealed(false);
   };
 

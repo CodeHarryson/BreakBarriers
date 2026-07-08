@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { AVATAR_BASES } from '@/data/wardrobe';
+import { track } from '@/lib/analytics';
 import { fetchRemoteProfile } from '@/lib/sync';
 import { levelForXp, useProfile, type RemoteProfile } from '@/state/profile';
 
@@ -35,6 +36,7 @@ export default function OnboardingScreen() {
 
   const finish = (skipToPath: boolean) => {
     completeOnboarding(motivation, base);
+    track('onboarding_completed', { motivation });
     if (skipToPath) {
       router.replace('/');
     } else {

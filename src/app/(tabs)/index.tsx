@@ -9,6 +9,7 @@ import { GoalRing } from '@/components/goal-ring';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { track } from '@/lib/analytics';
 import { course, isLessonUnlocked } from '@/lib/content';
 import { dateKey, effectiveStreak } from '@/lib/streak';
 import { CHEST_REWARDS, levelForXp, useProfile, weekKey } from '@/state/profile';
@@ -62,7 +63,11 @@ export default function LearnScreen() {
             <Pressable
               accessibilityRole="button"
               disabled={!chestAvailable}
-              onPress={() => setJustClaimed(claimChest())}>
+              onPress={() => {
+                const reward = claimChest();
+                setJustClaimed(reward);
+                if (reward !== null) track('chest_claimed', { day: chestDay + 1, reward });
+              }}>
               <ThemedView
                 type="backgroundElement"
                 style={[styles.chest, justClaimed !== null && { borderColor: Palette.amber, borderWidth: 2 }]}>
