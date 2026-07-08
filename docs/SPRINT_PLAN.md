@@ -69,11 +69,11 @@ Shipped ahead of schedule, all committed:
 
 | Status | Pts | Item | Acceptance criteria |
 |---|---|---|---|
-| [!] | 🔑 2 | Create Expo account, `eas init`, iOS credentials | `eas build --profile development` succeeds |
-| [!] | 🔑 3 | Enroll in Apple Developer Program ($99 — approval can take days, **do this ASAP**) | Enrollment confirmed |
+| [x] | 🔑 2 | Create Expo account, `eas init`, iOS credentials | Logged in as codeharry; project @codeharry/breakbarriers linked; simulator build FINISHED, installed, connects to Metro |
+| [x] | 🔑 3 | Enroll in Apple Developer Program | Active (user already enrolled) |
 | [x] | 3 | Local streak-reminder notifications (evening, only if today's goal unmet), Yorùbá+English copy | Next 19:00 slot; reschedules on profile changes; permission asked at first lesson-complete |
 | [x] | 3 | Practice-due notification (morning, only if ≥5 cards due) | 09:00 next day; skips below threshold; silent without permission |
-| [!] | 3 | Development build on physical iPhone (dev client) | Blocked on Expo + Apple accounts |
+| [~] | 3 | Development build on physical iPhone (dev client) | Simulator build verified; device build needs `eas device:create` + `eas build --profile development` (interactive Apple sign-in) |
 | [x] | 2 | Deploy `server/` + point `EXPO_PUBLIC_API_URL` at it | **Live on Vercel (free)**: breakbarriers-api.vercel.app/api — round-trip verified; Fly config kept as fallback |
 | [x] | 2 | Weekly cowrie chest (escalating 3→15 🐚 across Mon–Sun, resets weekly) | Chest card on Learn; state survives restart |
 | [x] | 2 | Perfect-lesson bonus (+5 🐚 for 100%) with celebration | "Pípé!" summary variant, bonus itemized |
