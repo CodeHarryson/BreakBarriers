@@ -8,7 +8,9 @@
     "scheme": "breakbarriers",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.codeharry.breakbarriers",
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +39,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a04c0e81-717a-43f4-abdd-4ccc4e94d23a"
+      }
+    },
+    "owner": "codeharry"
   }
 }
