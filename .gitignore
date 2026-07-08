@@ -47,3 +47,8 @@ example
 server/.env
 .vercel
 .env*
+
+# Claude Code / Ruflo tooling state (local, regenerable)
+.claude/
+.claude-flow/
+.swarm/

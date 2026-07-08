@@ -29,8 +29,12 @@ export default function PracticeScreen() {
 
   const grade = (rating: (typeof GRADES)[number]['rating']) => {
     if (!currentId) return;
+    const streakBefore = useProfile.getState().streak.current;
     reviewVocab(currentId, rating);
+    const streakAfter = useProfile.getState().streak.current;
     track('review_completed', { rating });
+    // Only when today's first activity actually bumped the streak (not same-day repeats or resets).
+    if (streakAfter > streakBefore) track('streak_extended', { current: streakAfter });
     setRevealed(false);
   };
 

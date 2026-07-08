@@ -96,15 +96,22 @@ Shipped ahead of schedule, all committed:
 
 **Goal:** strangers can install it; we can see what they do and where it crashes.
 
-| Pts | Item | Acceptance criteria |
-|---|---|---|
-| 🔑 2 | App Store Connect app record, TestFlight internal group | Build visible in TestFlight |
-| 🔑 2 | Decide avatar art direction + commission per [AVATAR_SPEC.md](./AVATAR_SPEC.md) (layered 2D: free identity layers — 8 skins/10 hair —, paid wardrobe layers) OR bless emoji for beta | Decision recorded; assets ordered if commissioned |
-| 3 | App icon + splash (àdìrẹ-pattern placeholder is fine) & display name — **current UI is the functional skeleton, not final design**; this + avatar art is where visual identity lands | Passes App Store asset validation |
-| 3 | PostHog: session, lesson_start/complete, review_done, streak_day, contract events schema | Events visible in dashboard |
-| 3 | Sentry crash reporting + source maps | Test crash symbolicated |
-| 3 | `eas build` production profile + TestFlight submission pipeline (`eas submit`) | One-command ship |
-| 3 | Performance/a11y pass: cold start <2s on device, Dynamic Type doesn't break layouts, VoiceOver labels on exercise controls | Verified on device |
+| Status | Pts | Item | Acceptance criteria |
+|---|---|---|---|
+| [!] | 🔑 2 | App Store Connect app record, TestFlight internal group | Build visible in TestFlight |
+| [!] | 🔑 2 | Decide avatar art direction + commission per [AVATAR_SPEC.md](./AVATAR_SPEC.md) (layered 2D: free identity layers — 8 skins/10 hair —, paid wardrobe layers) OR bless emoji for beta | Decision recorded; assets ordered if commissioned |
+| [x] | 3 | App icon + splash (àdìrẹ-pattern placeholder is fine) & display name — **current UI is the functional skeleton, not final design**; this + avatar art is where visual identity lands | Passes App Store asset validation — icon.png verified 1024×1024, no alpha channel |
+| [x] | 3 | PostHog: session, lesson_start/complete, review_done, streak_day, contract events schema | `session_started`, `lesson_started`/`lesson_completed`, `review_completed`, `streak_extended` (guarded to fire once per day the streak actually increments) all wired. Contract events deliberately **not** added — the Immersion Contract feature doesn't exist until Sprint 5; schema lands with the feature. Dashboard visibility needs a real `EXPO_PUBLIC_POSTHOG_KEY` (🔑 Harry) |
+| [~] | 3 | Sentry crash reporting + source maps | SDK wired since Sprint 1–3; `metro.config.js` added this sprint (`getSentryExpoConfig`) so JS source maps actually generate — previously missing entirely. Upload/symbolication is inert until Harry creates a Sentry project and sets `SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN`/`EXPO_PUBLIC_SENTRY_DSN` as EAS secrets (🔑) |
+| [!] | 3 | `eas build` production profile + TestFlight submission pipeline (`eas submit`) | One-command ship — `eas.json` profiles already in place from earlier sprints; blocked on the App Store Connect app record above before it can actually be exercised |
+| [~] | 3 | Performance/a11y pass: cold start <2s on device, Dynamic Type doesn't break layouts, VoiceOver labels on exercise controls | Dynamic Type: per-type `maxFontSizeMultiplier` caps added to `ThemedText` (display 1.3×, body 1.6×). VoiceOver labels were already broadly present across screens/exercises from earlier sprints. Cold-start audited — no blocking work found before first paint — but the <2s number and an on-device VoiceOver pass still need Harry on a physical iPhone |
+
+**Blockers for Harry:**
+1. Create the App Store Connect app record + TestFlight internal group (needed for the submission pipeline item and the M2 acceptance criteria itself).
+2. Record the avatar decision — recommend defaulting to "bless emoji for beta" (explicitly allowed by AVATAR_SPEC.md) so this doesn't slip M2; commission later if you want real art before wider beta.
+3. Create a Sentry project; set `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`, `EXPO_PUBLIC_SENTRY_DSN` as EAS secrets. Set a production `EXPO_PUBLIC_POSTHOG_KEY` too, if not already set — otherwise both stay silent no-ops.
+4. Run `eas build --profile production` + `eas submit` yourself once the App Store Connect record exists (interactive Apple sign-in, same pattern as the Sprint 2 device build).
+5. Verify cold start time and VoiceOver behavior on your physical iPhone.
 
 ## 8. Sprint 5 — Immersion Contract I (Aug 3 → Aug 7) · 20 pts
 

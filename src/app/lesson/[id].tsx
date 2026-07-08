@@ -65,7 +65,9 @@ export default function LessonScreen() {
       setCowriesEarned(
         (alreadyDone ? 2 : COWRIES_PER_LESSON) + (perfect ? PERFECT_BONUS_COWRIES : 0),
       );
+      const streakBefore = useProfile.getState().streak.current;
       completeLesson(lesson.id, perfect);
+      const streakAfter = useProfile.getState().streak.current;
       track('lesson_completed', {
         lessonId: lesson.id,
         kind: lessonKind,
@@ -73,6 +75,8 @@ export default function LessonScreen() {
         total,
         perfect,
       });
+      // Only when today's first activity actually bumped the streak (not same-day repeats or resets).
+      if (streakAfter > streakBefore) track('streak_extended', { current: streakAfter });
       if (Platform.OS !== 'web') {
         void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }

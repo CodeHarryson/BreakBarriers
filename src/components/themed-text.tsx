@@ -8,11 +8,24 @@ export type ThemedTextProps = TextProps & {
   themeColor?: ThemeColor;
 };
 
+// Display styles capped tighter so large accessibility sizes don't blow out fixed layouts; body text scales looser. Overridable via props ({...rest} wins).
+const TYPE_MAX_FONT_SCALE: Record<NonNullable<ThemedTextProps['type']>, number> = {
+  default: 1.6,
+  title: 1.3,
+  subtitle: 1.3,
+  small: 1.6,
+  smallBold: 1.6,
+  link: 1.6,
+  linkPrimary: 1.6,
+  code: 1.6,
+};
+
 export function ThemedText({ style, type = 'default', themeColor, ...rest }: ThemedTextProps) {
   const theme = useTheme();
 
   return (
     <Text
+      maxFontSizeMultiplier={TYPE_MAX_FONT_SCALE[type]}
       style={[
         { color: theme[themeColor ?? 'text'] },
         type === 'default' && styles.default,

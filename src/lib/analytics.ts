@@ -18,6 +18,7 @@ export function initAnalytics(): void {
 }
 
 type AnalyticsEvent =
+  | { name: 'session_started'; props: Record<string, never> }
   | { name: 'onboarding_completed'; props: { motivation: string | null } }
   | { name: 'lesson_started'; props: { lessonId: string; kind: string } }
   | {
