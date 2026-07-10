@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.codeharry.breakbarriers",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +33,9 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#4B3F72",
-          "dark": { "backgroundColor": "#332B52" },
+          "dark": {
+            "backgroundColor": "#332B52"
+          },
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200
         }
