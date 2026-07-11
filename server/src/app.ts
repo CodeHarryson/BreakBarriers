@@ -1,5 +1,5 @@
 /**
- * BreakBarriers sync API (MVP).
+ * Asa mi sync API (MVP).
  *
  * The app is offline-first; the device is the source of truth. Sync is a
  * last-write-wins snapshot push plus an append-only review-log stream (the

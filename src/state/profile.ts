@@ -73,6 +73,7 @@ interface ProfileState {
   chestLastClaim: string | null;
   chestWeekKey: string;
   chestDayIndex: number;
+  themeOverride: 'system' | 'light' | 'dark';
 
   completeLesson: (lessonId: string, perfect?: boolean) => void;
   claimChest: () => number | null;
@@ -83,6 +84,7 @@ interface ProfileState {
   setAvatarBase: (base: string) => void;
   completeOnboarding: (motivation: string | null, base: string) => void;
   restoreFromRemote: (remote: RemoteProfile) => void;
+  setThemeOverride: (v: 'system' | 'light' | 'dark') => void;
   dueVocabIds: () => string[];
   todayXp: () => number;
 }
@@ -116,6 +118,7 @@ export const useProfile = create<ProfileState>()(
       chestLastClaim: null,
       chestWeekKey: weekKey(),
       chestDayIndex: 0,
+      themeOverride: 'system',
 
       completeLesson: (lessonId, perfect = false) => {
         const entry = getLesson(lessonId);
@@ -217,6 +220,8 @@ export const useProfile = create<ProfileState>()(
           srsDeck: remote.srsDeck ?? {},
           onboarded: true,
         })),
+
+      setThemeOverride: (v) => set({ themeOverride: v }),
 
       dueVocabIds: () => dueCards(get().srsDeck),
 

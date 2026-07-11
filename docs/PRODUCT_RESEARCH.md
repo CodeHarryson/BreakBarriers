@@ -1,4 +1,4 @@
-# BreakBarriers — Product Research
+# Asa mi — Product Research
 
 *Yoruba immersion language-learning app · Research compiled July 2026*
 
@@ -62,7 +62,7 @@ Numbers from published analyses of Duolingo's mechanics:
 - **XP leaderboards/leagues** drive ~40% more engagement — but ship *after* the core loop is solid (leagues need a user base to matter).
 - **Soft currency + customization** (gems → cosmetics) closes the reward loop.
 
-**BreakBarriers adaptations (culturally native, not skinned):**
+**Asa mi adaptations (culturally native, not skinned):**
 - **Currency: cowries (owó ẹyọ)** — the historical Yoruba currency. Perfect thematic fit for "earn and spend."
 - **Avatar wardrobe as level rewards:** aṣọ òkè fabrics, gèlè (headwrap), agbádá, fìlà, coral beads, talking-drum accessories — unlocked by level, purchasable with cowries. This is a genuine differentiator: cultural pride *is* the collectible.
 - **Streak = "Iná" (fire)** with freezes purchasable in cowries.
@@ -100,7 +100,7 @@ Feasible and cheap for **text**: during immersion sessions, free-text inputs (ch
 
 ## 6. Positioning
 
-> **BreakBarriers: the first serious Yoruba app.** Commit to an immersion period, live in Yorùbá, and earn your heritage back — one streak at a time.
+> **Asa mi: the first serious Yoruba app.** Commit to an immersion period, live in Yorùbá, and earn your heritage back — one streak at a time.
 
 - **vs. Duolingo:** they don't have Yoruba. Full stop. We borrow their loop and beat them on depth.
 - **vs. Ling/Drops/Bluebird:** they translated a template into Yoruba. We built Yoruba-first: real tones, real diacritics, real culture, real commitment.

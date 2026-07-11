@@ -1,5 +1,5 @@
 /**
- * Best-effort push sync to the BreakBarriers API (server/). The device is the
+ * Best-effort push sync to the Asa mi API (server/). The device is the
  * source of truth; sync failures are silent and retried on the next trigger.
  * Set EXPO_PUBLIC_API_URL (see .env.example) — sync is a no-op without it.
  */

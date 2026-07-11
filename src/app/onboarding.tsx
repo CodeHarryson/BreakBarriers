@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Palette } from '@/components/exercises/exercise-footer';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { AVATAR_BASES } from '@/data/wardrobe';
 import { track } from '@/lib/analytics';
@@ -57,12 +59,12 @@ export default function OnboardingScreen() {
           <View style={styles.step}>
             <ThemedText style={styles.hero}>🔥</ThemedText>
             <ThemedText type="title" style={styles.centered}>
-              BreakBarriers
+              Asa mi
             </ThemedText>
             <ThemedText themeColor="textSecondary" style={styles.centered}>
               Learn Yorùbá by living in it. Lessons, real tones, and a streak worth protecting.
             </ThemedText>
-            <PrimaryButton label="Bẹ̀rẹ̀! (Start)" onPress={() => setStep('motivation')} />
+            <Button label="Bẹ̀rẹ̀! (Start)" onPress={() => setStep('motivation')} />
             {remote && (
               <Pressable accessibilityRole="button" onPress={restore} style={styles.linkButton}>
                 <ThemedText type="smallBold" style={{ color: Palette.indigo }}>
@@ -80,25 +82,19 @@ export default function OnboardingScreen() {
             </ThemedText>
             <View style={styles.options}>
               {MOTIVATIONS.map((m) => (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={m.label}
-                  accessibilityState={{ selected: motivation === m.id }}
+                <Card
                   key={m.id}
                   onPress={() => setMotivation(m.id)}
-                  style={[styles.option, motivation === m.id && styles.optionSelected]}>
-                  <ThemedView type="backgroundElement" style={styles.optionInner}>
-                    <ThemedText style={styles.optionEmoji}>{m.emoji}</ThemedText>
-                    <ThemedText type="smallBold">{m.label}</ThemedText>
-                  </ThemedView>
-                </Pressable>
+                  selected={motivation === m.id}
+                  accessibilityLabel={m.label}
+                  accessibilityState={{ selected: motivation === m.id }}
+                  style={styles.optionRow}>
+                  <ThemedText style={styles.optionEmoji}>{m.emoji}</ThemedText>
+                  <ThemedText type="smallBold">{m.label}</ThemedText>
+                </Card>
               ))}
             </View>
-            <PrimaryButton
-              label="Continue"
-              disabled={!motivation}
-              onPress={() => setStep('avatar')}
-            />
+            <Button label="Continue" disabled={!motivation} onPress={() => setStep('avatar')} />
           </View>
         )}
 
@@ -123,7 +119,7 @@ export default function OnboardingScreen() {
                 </Pressable>
               ))}
             </View>
-            <PrimaryButton label="Start my first lesson" onPress={() => finish(false)} />
+            <Button label="Start my first lesson" onPress={() => finish(false)} />
             <Pressable accessibilityRole="button" onPress={() => finish(true)} style={styles.linkButton}>
               <ThemedText type="small" themeColor="textSecondary">
                 Skip — explore first
@@ -133,26 +129,6 @@ export default function OnboardingScreen() {
         )}
       </SafeAreaView>
     </ThemedView>
-  );
-}
-
-function PrimaryButton({
-  label,
-  onPress,
-  disabled,
-}: {
-  label: string;
-  onPress: () => void;
-  disabled?: boolean;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      disabled={disabled}
-      onPress={onPress}
-      style={[styles.primaryButton, { backgroundColor: disabled ? '#AFAFAF' : Palette.green }]}>
-      <ThemedText style={styles.primaryLabel}>{label}</ThemedText>
-    </Pressable>
   );
 }
 
@@ -183,20 +159,10 @@ const styles = StyleSheet.create({
   options: {
     gap: Spacing.two,
   },
-  option: {
-    borderRadius: 18,
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  optionSelected: {
-    borderColor: Palette.indigo,
-  },
-  optionInner: {
-    borderRadius: 16,
+  optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
-    padding: Spacing.three,
   },
   optionEmoji: {
     fontSize: 26,
@@ -220,15 +186,6 @@ const styles = StyleSheet.create({
   baseEmoji: {
     fontSize: 40,
     lineHeight: 50,
-  },
-  primaryButton: {
-    borderRadius: 16,
-    paddingVertical: Spacing.three,
-    alignItems: 'center',
-  },
-  primaryLabel: {
-    color: '#fff',
-    fontWeight: '700',
   },
   linkButton: {
     alignItems: 'center',

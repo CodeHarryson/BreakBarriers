@@ -1,4 +1,4 @@
-# BreakBarriers — Sprint Plan
+# Asa mi — Sprint Plan
 
 *Created July 6, 2026. Companion to [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md); this is the execution schedule.*
 

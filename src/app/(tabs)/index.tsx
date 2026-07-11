@@ -1,6 +1,6 @@
 import { Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,6 +8,7 @@ import { Palette } from '@/components/exercises/exercise-footer';
 import { GoalRing } from '@/components/goal-ring';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Card } from '@/components/ui/card';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { track } from '@/lib/analytics';
 import { course, isLessonUnlocked } from '@/lib/content';
@@ -66,40 +67,36 @@ export default function LearnScreen() {
 
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
           {(chestAvailable || justClaimed !== null) && (
-            <Pressable
-              accessibilityRole="button"
-              disabled={!chestAvailable}
+            <Card
               onPress={() => {
                 const reward = claimChest();
                 setJustClaimed(reward);
                 if (reward !== null) track('chest_claimed', { day: chestDay + 1, reward });
-              }}>
-              <ThemedView
-                type="backgroundElement"
-                style={[styles.chest, justClaimed !== null && { borderColor: Palette.amber, borderWidth: 2 }]}>
-                {justClaimed !== null ? (
-                  <Animated.View entering={FadeIn.duration(250)} style={styles.chestInner}>
-                    <ThemedText style={styles.chestEmoji}>✨</ThemedText>
-                    <View>
-                      <ThemedText type="smallBold">+{justClaimed} 🐚 collected!</ThemedText>
-                      <ThemedText type="small" themeColor="textSecondary">
-                        Day {Math.min(chestDayIndex, CHEST_REWARDS.length)} of 7 — bigger every day
-                      </ThemedText>
-                    </View>
-                  </Animated.View>
-                ) : (
-                  <View style={styles.chestInner}>
-                    <ThemedText style={styles.chestEmoji}>🎁</ThemedText>
-                    <View>
-                      <ThemedText type="smallBold">Daily chest · +{chestReward} 🐚</ThemedText>
-                      <ThemedText type="small" themeColor="textSecondary">
-                        Day {chestDay + 1} of 7 — tap to open
-                      </ThemedText>
-                    </View>
+              }}
+              disabled={!chestAvailable}
+              accentColor={justClaimed !== null ? Palette.amber : undefined}>
+              {justClaimed !== null ? (
+                <Animated.View entering={FadeIn.duration(250)} style={styles.chestInner}>
+                  <ThemedText style={styles.chestEmoji}>✨</ThemedText>
+                  <View>
+                    <ThemedText type="smallBold">+{justClaimed} 🐚 collected!</ThemedText>
+                    <ThemedText type="small" themeColor="textSecondary">
+                      Day {Math.min(chestDayIndex, CHEST_REWARDS.length)} of 7 — bigger every day
+                    </ThemedText>
                   </View>
-                )}
-              </ThemedView>
-            </Pressable>
+                </Animated.View>
+              ) : (
+                <View style={styles.chestInner}>
+                  <ThemedText style={styles.chestEmoji}>🎁</ThemedText>
+                  <View>
+                    <ThemedText type="smallBold">Daily chest · +{chestReward} 🐚</ThemedText>
+                    <ThemedText type="small" themeColor="textSecondary">
+                      Day {chestDay + 1} of 7 — tap to open
+                    </ThemedText>
+                  </View>
+                </View>
+              )}
+            </Card>
           )}
           {course.units.map((unit) => (
             <View key={unit.id} style={styles.unit}>
@@ -111,8 +108,7 @@ export default function LearnScreen() {
                 const unlocked = isLessonUnlocked(lesson.id, completedLessons);
                 const isCheckpoint = lesson.kind === 'checkpoint';
                 return (
-                  <Pressable
-                    accessibilityRole="button"
+                  <Card
                     accessibilityLabel={`${isCheckpoint ? 'Checkpoint: ' : ''}${lesson.titleYo}, ${lesson.titleEn}. ${lesson.xp} XP. ${
                       done ? 'Completed' : !unlocked ? 'Locked' : 'Not started'
                     }`}
@@ -120,13 +116,11 @@ export default function LearnScreen() {
                     key={lesson.id}
                     disabled={!unlocked}
                     onPress={() => router.push(`/lesson/${lesson.id}`)}
-                    style={[
-                      styles.lesson,
-                      done && { borderColor: Palette.green, borderWidth: 2 },
-                      isCheckpoint && !done && unlocked && { borderColor: Palette.amber, borderWidth: 2 },
-                      !unlocked && { opacity: 0.4 },
-                    ]}>
-                    <ThemedView type="backgroundElement" style={styles.lessonInner}>
+                    accentColor={
+                      done ? Palette.green : isCheckpoint && !done && unlocked ? Palette.amber : undefined
+                    }
+                    style={!unlocked && { opacity: 0.4 }}>
+                    <View style={styles.lessonInner}>
                       <ThemedText type="subtitle" style={styles.lessonEmoji}>
                         {done ? '✅' : !unlocked ? '🔒' : isCheckpoint ? '🏆' : '📖'}
                       </ThemedText>
@@ -138,8 +132,8 @@ export default function LearnScreen() {
                           {lesson.titleEn} · {lesson.xp} XP
                         </ThemedText>
                       </View>
-                    </ThemedView>
-                  </Pressable>
+                    </View>
+                  </Card>
                 );
               })}
             </View>
@@ -179,10 +173,6 @@ const styles = StyleSheet.create({
     gap: Spacing.four,
     paddingBottom: BottomTabInset + Spacing.five,
   },
-  chest: {
-    borderRadius: 16,
-    padding: Spacing.three,
-  },
   chestInner: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -198,15 +188,10 @@ const styles = StyleSheet.create({
   unitTitle: {
     textTransform: 'uppercase',
   },
-  lesson: {
-    borderRadius: 18,
-  },
   lessonInner: {
-    borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
-    padding: Spacing.three,
   },
   lessonEmoji: {
     fontSize: 28,

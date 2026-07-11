@@ -4,8 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Palette } from '@/components/exercises/exercise-footer';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { BottomTabInset, MaxContentWidth, Radius, Spacing } from '@/constants/theme';
 import { AVATAR_BASES, WARDROBE, type WardrobeSlot } from '@/data/wardrobe';
+import { useTheme } from '@/hooks/use-theme';
 import { effectiveStreak } from '@/lib/streak';
 import {
   FREEZE_COST_COWRIES,
@@ -14,6 +17,12 @@ import {
   useProfile,
   XP_PER_LEVEL,
 } from '@/state/profile';
+
+const THEME_OPTIONS = [
+  { value: 'system', label: 'System' },
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+] as const;
 
 export default function ProfileScreen() {
   const {
@@ -26,7 +35,10 @@ export default function ProfileScreen() {
     buyStreakFreeze,
     equipItem,
     setAvatarBase,
+    themeOverride,
+    setThemeOverride,
   } = useProfile();
+  const theme = useTheme();
   const level = levelForXp(xp);
   const canBuyFreeze = cowries >= FREEZE_COST_COWRIES && streak.freezes < MAX_FREEZES;
 

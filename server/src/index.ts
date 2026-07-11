@@ -10,5 +10,5 @@ import { app } from './app.js';
 
 const port = Number(process.env.PORT ?? 8787);
 serve({ fetch: app.fetch, port }, () => {
-  console.log(`BreakBarriers sync API listening on :${port}`);
+  console.log(`Asa mi sync API listening on :${port}`);
 });

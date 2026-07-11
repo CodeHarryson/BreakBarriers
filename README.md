@@ -1,4 +1,4 @@
-# BreakBarriers
+# Asa mi
 
 A Yoruba language-learning app built around **total immersion**: commit to an
 immersion period, live in Yorùbá, and earn your heritage back — one streak at

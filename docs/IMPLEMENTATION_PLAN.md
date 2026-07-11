@@ -1,4 +1,4 @@
-# BreakBarriers — Implementation Plan
+# Asa mi — Implementation Plan
 
 *Companion to [PRODUCT_RESEARCH.md](./PRODUCT_RESEARCH.md). Target: Yoruba, modeled on Duolingo's core loop, differentiated by the Immersion Contract.*
 
@@ -132,7 +132,7 @@ xp_events(user_id, amount, source, created_at)                 -- powers leagues
 - Premium subscription (unlimited hearts, offline packs, streak insurance, exclusive wardrobe) + Immersion Intensive paid programs.
 - Yoruba ASR pilot (fine-tuned MMS/Whisper on YorùLect-style data) for graded speaking and voice-based Yorùbá-only enforcement.
 - FSRS parameter optimization from accumulated review logs; A/B testing framework.
-- Explore: Igbo/Twi/Swahili as follow-on courses on the same engine ("BreakBarriers" = African languages platform).
+- Explore: Igbo/Twi/Swahili as follow-on courses on the same engine ("Asa mi" = African languages platform).
 
 ---
 
